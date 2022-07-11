@@ -1,0 +1,12 @@
+html, body {
+  max-width: 1050px;
+  margin: 10px;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+
+.capitalize {
+    text-transform: capitalize;   
+  }

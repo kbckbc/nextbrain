@@ -1,0 +1,14 @@
+{
+  "name": "nextbrain",
+  "version": "1.0.0",
+  "description": "nextbrain",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Byeongchan Gwak",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
