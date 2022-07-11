@@ -62,13 +62,27 @@ const gameStep = Object.freeze({
 let prevAnswers = [];
 
 
-
 function preload() {
   // html setting
   txtPlayerName = select('#txtPlayerName');
   txtSchoolName = select('#txtSchoolName');
   divNavi = select('#divNavi');
   divBody = select('#divBody');
+
+  
+  select('#btnScore1').mousePressed(() => {
+    let score = {timestamp:Date.now(), name:'jisung', school:'conway', hit:5, wrong:1};  
+    console.log('send score', score);    
+    fetch('/state/ranking', {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify(score)
+    })
+    .then((res)=>res.json())
+    .then((json)=>console.log('send back', json));
+  });
 
   btnUsa = select('#btnUsa');
   btnScore = select('#btnScore');
@@ -267,7 +281,7 @@ function saveScore() {
   scoreArr.push(score);
   
   localStorage.setItem('brainChallenge', JSON.stringify(scoreArr));
-  
+
   console.log('saveScore complete');
 }
 

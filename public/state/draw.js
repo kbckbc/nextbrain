@@ -1,3 +1,57 @@
+function writeScore1() {
+  console.log('score1');
+  let scoreStr = "<< Score Board 1 >><br>";  
+  let headerStr = ``;
+
+  divScore = createDiv();
+  divScore.parent(divBody);  
+
+  fetch('/state/ranking', {
+    method:'GET'
+  })
+  .then((res)=>res.json())
+  .then((data)=> {
+    console.log('GET receive', data);
+    if( data.length == 0) {
+      scoreStr += "No one played yet!<br>";
+      scoreStr += "Be the first student challenging this game!<br>";
+    }
+    else {
+      console.log('data', data);
+
+      let playerNum = data.length;
+      scoreStr += `${playerNum} student(s) have challenged this game!<br><br>`;
+      
+      let sortbyHitDescend = data.slice().sort((a, b) => b.hit - a.hit);
+      
+      let rank = 1;
+      //console.log('scoreArr', scoreArr);  
+      for( let i in sortbyHitDescend ) {
+        let score = sortbyHitDescend[i];
+        let timestamp = score.timestamp;
+        let date = new Date(timestamp).toUTCString(); 
+        let name = score.name;
+        let school = score.school;
+        let hit = score.hit;
+        let wrong = score.wrong;
+        
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+        school = school.charAt(0).toUpperCase() + school.slice(1);
+  
+        let lineStr = `Rank #${rank} : ${hit} right answer(s), ${date}, ${name} from ${school}<br>`;
+        // createP(lin?).parent(divBody);
+        
+        scoreStr += lineStr;
+        rank++;      
+      }
+    }
+
+    divScore.html(scoreStr);      
+  });
+  
+  
+}
+
 function writeScore() {
   let scoreStr = "<< Score Board >><br>";  
   let headerStr = ``;

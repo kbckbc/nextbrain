@@ -88,5 +88,6 @@ function showScore() {
   // for debug purpose
   //localStorage.clear();
   initGame();  
-  writeScore(); 
+  // writeScore(); 
+  writeScore1();
 }
