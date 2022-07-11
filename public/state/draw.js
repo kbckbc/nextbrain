@@ -1,66 +1,54 @@
-function writeScore1() {
-  console.log('score1');
-  let scoreStr = "<< Score Board 1 >><br>";  
-  let headerStr = ``;
+function writeScore(data) {
+  console.log('data length', data.length);
+
+  let scoreStr = "<< Score Board >><br>";  
 
   divScore = createDiv();
   divScore.parent(divBody);  
 
-  fetch('/state/ranking', {
-    method:'GET'
-  })
-  .then((res)=>res.json())
-  .then((data)=> {
-    console.log('GET receive', data);
-    if( data.length == 0) {
-      scoreStr += "No one played yet!<br>";
-      scoreStr += "Be the first student challenging this game!<br>";
-    }
-    else {
-      console.log('data', data);
+  if( data.length == 0) {
+    scoreStr += "No one played yet!<br>";
+    scoreStr += "Be the first student challenging this game!<br>";
+  }
+  else {
+    let playerNum = data.length;
+    scoreStr += `${playerNum} student(s) have challenged this game!<br><br>`;
+    
+    let sortbyNameAscend = data.slice().sort((a, b) => (a.name - b.name));
+    let sortbyHitDescend = sortbyNameAscend.slice().sort((a, b) => b.hit - a.hit);
 
-      let playerNum = data.length;
-      scoreStr += `${playerNum} student(s) have challenged this game!<br><br>`;
+    let rank = 1;
+    //console.log('scoreArr', scoreArr);  
+    for( let i in sortbyHitDescend ) {
+      let score = sortbyHitDescend[i];
+      let timestamp = score.timestamp;
+      let date = new Date(timestamp).toUTCString(); 
+      let name = score.name;
+      let school = score.school;
+      let hit = score.hit;
+      let wrong = score.wrong;
       
-      let sortbyHitDescend = data.slice().sort((a, b) => b.hit - a.hit);
-      
-      let rank = 1;
-      //console.log('scoreArr', scoreArr);  
-      for( let i in sortbyHitDescend ) {
-        let score = sortbyHitDescend[i];
-        let timestamp = score.timestamp;
-        let date = new Date(timestamp).toUTCString(); 
-        let name = score.name;
-        let school = score.school;
-        let hit = score.hit;
-        let wrong = score.wrong;
-        
-        name = name.charAt(0).toUpperCase() + name.slice(1);
-        school = school.charAt(0).toUpperCase() + school.slice(1);
-  
-        let lineStr = `Rank #${rank} : ${hit} right answer(s), ${date}, ${name} from ${school}<br>`;
-        // createP(lin?).parent(divBody);
-        
-        scoreStr += lineStr;
-        rank++;      
-      }
-    }
+      name = name.charAt(0).toUpperCase() + name.slice(1);
+      school = school.charAt(0).toUpperCase() + school.slice(1);
 
-    divScore.html(scoreStr);      
-  });
-  
-  
+      let lineStr = `Rank #${rank} : ${hit} right answer(s), ${date}, ${name} from ${school}<br>`;
+      
+      scoreStr += lineStr;
+      rank++;      
+    }
+  }
+
+  divScore.html(scoreStr);      
 }
 
-function writeScore() {
-  let scoreStr = "<< Score Board >><br>";  
-  let headerStr = ``;
+function writeScoreLocalStorage() {
+  let scoreStr = "<< Score Board with Local Storage >><br>";  
 
   divScore = createDiv();
   divScore.parent(divBody);  
 
   // get saved score from localStorage
-  let scoreArr = loadScore();
+  let scoreArr = loadScoreLocalStorage();
   
   // no saved score
   if( !scoreArr ) {
@@ -90,7 +78,6 @@ function writeScore() {
       school = school.charAt(0).toUpperCase() + school.slice(1);
 
       let lineStr = `Rank #${rank} : ${hit} right answer(s), ${date}, ${name} from ${school}<br>`;
-      // createP(lin?).parent(divBody);
       
       scoreStr += lineStr;
       rank++;

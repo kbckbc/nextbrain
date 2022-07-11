@@ -249,12 +249,87 @@ function checkAnswer() {
   return true;
 }
 
+function saveScore() {
+  let timestamp = Date.now();
+  let name = txtPlayerName.value();
+  let school = txtSchoolName.value();
+  let hit = 0, wrong = 0;
+  for(let i=0;i<qYourAnswer.length;i++) {
+    let correct = qYourAnswer[i][1];
+    if( correct == 1) {
+      hit++;
+    }
+    else {
+      wrong++;
+    }
+  }
+  
+  // don's save if score is 0
+  if( hit == 0 ) {
+    return;
+  }
+  
+  let score = {timestamp, name, school, hit, wrong};
+  insertInto(score)
+    .then(res => {
+      console.log('Nedb : insert into complete', res);
+    })
+  console.log('saveScore complete');
+}
+
 function loadScore() {
+  initGame();  
+
+  selectFrom()
+    .then(data => {
+      writeScore(data);
+    });
+  
+  // writeScoreLocalStorage(); 
+}
+
+function insertInto(obj) {
+  return fetch('/state/ranking', {
+    method:'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body:JSON.stringify(obj)
+  })
+    .then(res => res.json())
+    .catch(err => console.log('insert2db', err));
+}
+
+function selectFrom() {
+  // load ranking from database
+  return fetch('/state/ranking', {
+    method:'GET'
+  })
+    .then(res => res.json())
+    .then(res => {
+      console.log('Nedb : select from complete', res);
+      return res;
+    })
+    .catch(err => console.log('selectFrom', err));
+}
+
+/* Randomize array in-place using Durstenfeld shuffle algorithm */
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+  }
+}
+
+
+function loadScoreLocalStorage() {
   return JSON.parse(localStorage.getItem('brainChallenge'));
 }
 
-function saveScore() {
-  let timestamp = new Date().getTime();
+function saveScoreLocalStorage() {
+  let timestamp = Date.now();
   let name = txtPlayerName.value();
   let school = txtSchoolName.value();
   let hit = 0, wrong = 0;
@@ -283,15 +358,5 @@ function saveScore() {
   localStorage.setItem('brainChallenge', JSON.stringify(scoreArr));
 
   console.log('saveScore complete');
-}
-
-/* Randomize array in-place using Durstenfeld shuffle algorithm */
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
 }
 
