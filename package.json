@@ -13,6 +13,7 @@
     "firebase": "^9.9.0",
     "firebase-admin": "^11.0.0",
     "firebase-functions": "^3.22.0",
+    "mongodb": "^4.7.0",
     "nedb": "^1.8.0",
     "npm": "^8.13.2"
   }
