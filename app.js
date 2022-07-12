@@ -3,10 +3,10 @@ const nedb = require('nedb');
 
 const app = express();
 const port = process.env.PORT || 3000;
-const uri = process.env.MONGODB_URI;
+// const uri = process.env.MONGODB_URI;
 app.listen(port, () => {
     console.log(`listening at ${port}`);
-    console.log('uri', uri);
+    // console.log('uri', uri);
 });
 
 app.use(express.static('public'));
