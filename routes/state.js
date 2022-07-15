@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 // mongo db
 const { MongoClient } = require("mongodb");
 const uri = process.env.MONGODB_URI || 'mongodb+srv://nextbrain:NsGzoib2VlmnKbTe@cluster0.swhee.mongodb.net/?retryWrites=true&w=majority';
@@ -12,6 +13,12 @@ router.use((req, res, next) => {
   // console.log('port', port);
   next();
 });
+
+
+router.get('/state', (req, res) => {
+  res.render('state');
+});
+
 
 router.post('/ranking', (req, res) => {
   console.log('Got a request : ranking, POST');
@@ -32,6 +39,7 @@ router.post('/ranking', (req, res) => {
     }
     run().catch(console.dir); 
 });
+
 
 router.get('/ranking', (req, res) => {
     console.log('Got a request : ranking, GET');

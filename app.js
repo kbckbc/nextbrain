@@ -7,6 +7,9 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json({limit:'1mb'}));
 
+const bodyParser=require('body-parser');
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 
 // handlebars
 const hbs = require('express-handlebars');
@@ -20,8 +23,8 @@ app.set('view engine', 'hbs');
 
 
 // router
-const state = require('./routes/state');
-app.use('/state', state);
+app.use('/', require('./routes/state'));
+app.use('/', require('./routes/auth'));
 
 
 // start app
@@ -31,7 +34,7 @@ app.listen(port, () => {
 });
 
 
-// home rendering
+// home rendering 
 app.get('/', (req, res) => {
   res.render('home');
 });
