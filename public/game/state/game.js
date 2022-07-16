@@ -62,6 +62,9 @@ const gameStep = Object.freeze({
 let prevAnswers = [];
 
 
+let currPath = '/game/state';
+
+
 function preload() {
   // html setting
   txtPlayerName = select('#txtPlayerName');
@@ -99,12 +102,13 @@ function preload() {
   ch = windowHeight-200;
   
   // resource loading
-  questionImg = loadImage('./res/usa_0.png');
-  studyImg = loadImage('./res/usa_1.png');
-  correctSound = loadSound('./res/correct.mp3');
-  wrongSound = loadSound('./res/wrong.mp3');
-  perfectSound = loadSound('./res/perfect.mp3');
-  applauseSound = loadSound('./res/applause.mp3');
+  let currPath = '/game/state';
+  questionImg = loadImage(currPath + '/res/usa_0.png');
+  studyImg = loadImage(currPath + '/res/usa_1.png');
+  correctSound = loadSound(currPath + '/res/correct.mp3');
+  wrongSound = loadSound(currPath + '/res/wrong.mp3');
+  perfectSound = loadSound(currPath + '/res/perfect.mp3');
+  applauseSound = loadSound(currPath + '/res/applause.mp3');
   
   console.log('preload complete');
 }
@@ -289,7 +293,7 @@ function loadScore() {
 }
 
 function insertInto(obj) {
-  return fetch('/state/ranking', {
+  return fetch(currPath + '/ranking', {
     method:'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -302,7 +306,7 @@ function insertInto(obj) {
 
 function selectFrom() {
   // load ranking from database
-  return fetch('/state/ranking', {
+  return fetch(currPath + '/ranking', {
     method:'GET'
   })
     .then(res => res.json())

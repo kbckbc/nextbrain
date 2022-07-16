@@ -1,1 +1,16 @@
-<p>This is a home on localhost!</p>
+{{#if username}}
+<h3>{{username}}</h3>
+{{else}}
+<h3>Welcom guest!</h3>
+{{/if}}
+
+<nav>
+  <li><a href="/">Home</a></li>
+  <li><a href="/auth/signup">Sign up</a></li>
+{{#if username}}
+  <li><a href="/auth/logout">Log out</a></li>
+{{else}}
+  <li><a href="/auth/login">Log in</a></li>
+{{/if}}
+  <li><a href="/game/state">Playground - State</a></li>
+</nav>

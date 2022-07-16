@@ -1,12 +1,10 @@
 // express
 const express = require('express');
-const app = express();
-
+app = express();
 
 // middleware
 app.use(express.static('public'));
 app.use(express.json({limit:'1mb'}));
-
 const bodyParser=require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -22,9 +20,13 @@ app.engine( 'hbs', hbs.engine({
 app.set('view engine', 'hbs');
 
 
+// passport
+let passport = require('./lib/passport.js')(app);
+
+
 // router
-app.use('/', require('./routes/state'));
-app.use('/', require('./routes/auth'));
+app.use('/game', require('./routes/game'));
+app.use('/auth', require('./routes/auth')(passport));
 
 
 // start app
@@ -33,8 +35,22 @@ app.listen(port, () => {
     console.log(`listening at ${port}`);
 });
 
-
 // home rendering 
 app.get('/', (req, res) => {
-  res.render('home');
+  console.log('/req.user', req.user);
+  if(checkLogin(req)) {
+    res.render('home', {username:req.user.username});
+  }
+  else {
+    res.render('home');
+  }
 });
+
+function checkLogin(req) {
+  if(req.user == undefined) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
