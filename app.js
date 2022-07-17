@@ -37,7 +37,7 @@ app.listen(port, () => {
 
 // home rendering 
 app.get('/', (req, res) => {
-  console.log('/req.user', req.user);
+  console.log('app', '/', req.user, 'req.session', req.session);
   if(checkLogin(req)) {
     res.render('home', {username:req.user.username});
   }

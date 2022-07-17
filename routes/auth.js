@@ -16,5 +16,15 @@ module.exports = function (passport) {
     res.render('signup');
   });
 
+  router.get(currPath + '/logout', function(req, res, next) {
+    console.log('auth', '/logout 1', req.user, 'req.session', req.session);
+    if (req.session) {
+      req.session.destroy();
+    }
+    console.log('auth', '/logout 2', req.user, 'req.session', req.session);
+    res.redirect('/');
+  });
+
+
   return router;
 };
