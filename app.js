@@ -21,11 +21,12 @@ app.set('view engine', 'hbs');
 
 
 // passport
-let passport = require('./lib/passport.js')(app);
+const passport = require('./lib/passport.js')(app);
 
 
 // router
 app.use('/game', require('./routes/game'));
+app.use('/ranking', require('./routes/ranking'));
 app.use('/auth', require('./routes/auth')(passport));
 
 
@@ -38,15 +39,18 @@ app.listen(port, () => {
 // home rendering 
 app.get('/', (req, res) => {
   console.log('app', '/', req.user, 'req.session', req.session);
-  if(checkLogin(req)) {
-    res.render('home', {username:req.user.username});
-  }
-  else {
-    res.render('home');
-  }
+  res.render('home', {user: checkLogin(req) ? req.user : null});
+  // if(checkLogin(req)) {
+  //   console.log('app', '/', '1');
+  //   res.render('home', {username:req.user.username});
+  // }
+  // else {
+  //   console.log('app', '/', '2');
+  //   res.render('home');
+  // }
 });
 
-function checkLogin(req) {
+global.checkLogin = (req) => {
   if(req.user == undefined) {
     return false;
   }

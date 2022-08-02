@@ -1,0 +1,11 @@
+<h2>{{caller}} ranking!</h2>
+
+{{#if ranking}}
+    {{#each ranking}}
+    {{name}} {{school}} {{hit}} {{wrong}} {{timestamp}} <br>
+    {{/each}}
+{{else}}
+    <h3>No one played yet!</h3>
+    <h3>Be the first student challenging this game!</h3>
+{{/if}} 
+
