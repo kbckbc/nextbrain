@@ -1,12 +1,49 @@
 <h1>Sign in</h1>
-<form action="/login/password" method="post">
+<form action="/auth/signup" method="post">
     <section>
         <label for="username">Username</label>
         <input id="username" name="username" type="text" autocomplete="username" required autofocus>
     </section>
     <section>
-        <label for="current-password">Password</label>
-        <input id="current-password" name="password" type="password" autocomplete="current-password" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required>
     </section>
-    <button type="submit">Sign in</button>
+    <section>
+        <label for="password2">Password Confirm</label>
+        <input id="password2" name="password2" type="password" required>
+    </section>
+    <section>
+        <label for="current-password">School name</label>
+        <input id="schoolname" name="schoolname" type="text">
+    </section>
+    <section>
+        <label for="current-password">Grade level</label>
+        <select name="grade" id="grade">
+        <option value="0">Kindergarten</option>
+        <option value="1" selected>Elementary</option>
+        <option value="2">Middle</option>
+        <option value="3">High</option>
+        <option value="4">College</option>
+        </select>
+    </section>
+
+    <div id="errorMsg" style="color:red"></div>
+    <script>
+    let password = document.getElementById('password');
+    let password2 = document.getElementById('password2');
+    console.log('aaa');
+    function validatePassword() {
+        if ((password2.value!='')&&(password.value != password2.value)) {
+            document.getElementById('errorMsg').innerHTML=`Passwords Don\'t Match`;
+        } else {
+            document.getElementById('errorMsg').innerHTML='';
+        }
+    }
+    password.onchange = validatePassword;
+    password2.onkeyup = validatePassword;
+    </script>
+
+    <button type="submit">Sign up</button>
 </form>
+
+
