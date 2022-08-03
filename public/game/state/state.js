@@ -72,21 +72,6 @@ function preload() {
   divNavi = select('#divNavi');
   divBody = select('#divBody');
 
-  
-  select('#btnScore1').mousePressed(() => {
-    let score = {timestamp:Date.now(), name:'jisung', school:'conway', hit:5, wrong:1};  
-    console.log('send score', score);    
-    fetch('/state/ranking', {
-      method:'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify(score)
-    })
-    .then((res)=>res.json())
-    .then((json)=>console.log('send back', json));
-  });
-
   btnUsa = select('#btnUsa');
   btnScore = select('#btnScore');
   btnStudy = select('#btnStudy');
@@ -218,6 +203,7 @@ function gameLoop() {
 
 function initGame(which) {
   qStarted = false;
+  qSaved = false; // save score on the ranking
   qStep = gameStep.GIVE_QUESTION;
   qCurrNum = 0;
   qPrevNum = 0;
@@ -253,33 +239,6 @@ function checkAnswer() {
   return true;
 }
 
-function saveScore() {
-  let timestamp = Date.now();
-  let name = txtPlayerName.value();
-  let school = txtSchoolName.value();
-  let hit = 0, wrong = 0;
-  for(let i=0;i<qYourAnswer.length;i++) {
-    let correct = qYourAnswer[i][1];
-    if( correct == 1) {
-      hit++;
-    }
-    else {
-      wrong++;
-    }
-  }
-  
-  // don's save if score is 0
-  if( hit == 0 ) {
-    return;
-  }
-  
-  let score = {timestamp, name, school, hit, wrong};
-  insertInto(score)
-    .then(res => {
-      console.log('Nedb : insert into complete', res);
-    })
-  console.log('saveScore complete');
-}
 
 function loadScore() {
   initGame();  
@@ -293,7 +252,9 @@ function loadScore() {
 }
 
 function insertInto(obj) {
-  return fetch(currPath + '/ranking', {
+  console.log('insert into', obj);
+
+  return fetch('/ranking/state', {
     method:'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -301,7 +262,19 @@ function insertInto(obj) {
     body:JSON.stringify(obj)
   })
     .then(res => res.json())
+    // .then(window.location.assign('/'))
     .catch(err => console.log('insert2db', err));
+
+  // Build formData object.
+  // let formData = new FormData();
+  // formData.append('hit', '1');
+  // formData.append('wrong', '1');
+
+  // fetch("/ranking/state",
+  //     {
+  //         body: formData,
+  //         method: "post"
+  //   });  
 }
 
 function selectFrom() {
