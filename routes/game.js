@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const currPath = '';
 
 // middleware that is specific to this router
 router.use((req, res, next) => {
   console.log('/game/state, Time: ', Date.now(),'/req.user', req.user);
 
   if(!global.checkLogin(req)) {
+    console.log('/game', 'login disconnected');
     res.redirect('/auth/login');
   }
   else {
+    console.log('/game', 'login connected');
     next();
   }
 });

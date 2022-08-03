@@ -8,28 +8,23 @@ const dbName = 'nextbrainDB';
 const collName = 'ranking';
 
 
+// middleware that is specific to this router
+// router.use((req, res, next) => {
+//   console.log('/ranking, Time: ', Date.now(), req.method);
+
+//   // if(req.method == 'POST') {
+//   //   console.log('ranking 1');
+//   //   res.redirect('/');
+//   //   console.log('ranking 2');
+//   // }
+//   // else {
+//   //   console.log('ranking 3');
+//   //   next();
+//   // }
+// });
+
 router.get('/nuguri', (req, res) => {
   res.render('ranking', {caller:'nuguri'});
-});
-
-router.post('/state', (req, res) => {
-  console.log('Got a request : ranking, POST', req.body);
-
-  const data = req.body;
-
-  async function run() {
-      const mongoClient = new MongoClient(uri);
-      try {
-        const mongodb = mongoClient.db(dbName);
-        const coll = mongodb.collection(collName);
-        // create a document to insert
-        const result = await coll.insertOne(data);
-        console.log(`A document was inserted with the _id: ${result.insertedId}`);
-      } finally {
-        await mongoClient.close();
-      }
-  }
-  run().catch(console.dir); 
 });
 
 
@@ -57,6 +52,42 @@ router.get('/state', (req, res) => {
     run().catch(console.dir); 
 
 });
+
+
+router.post('/state', (req, res) => {
+  console.log('/ranking/state','req.uesr', req.user);
+  console.log('/ranking/state','req.body', req.body);
+  // res.send('hello, post');
+  
+  if( !global.checkLogin(req) ) {
+    let msg = `Due to disconnection, recording your score failed! Please login again!`;
+    let retObj = {'result':'0', msg};
+    res.json(retObj);
+  }
+  else {
+    const data = req.body;
+  
+    async function run() {
+        const mongoClient = new MongoClient(uri);
+        try {
+          const mongodb = mongoClient.db(dbName);
+          const coll = mongodb.collection(collName);
+          // create a document to insert
+          const result = await coll.insertOne(data);
+          let msg = `Your score has been recorded!`;
+          let retObj = {'result':'1', msg, 'insertid':result.insertedId};
+          console.log('/ranking/state', retObj);
+          res.json(retObj);
+          
+        } finally {
+          await mongoClient.close();
+        }
+    }
+    run().catch(console.dir); 
+  }
+
+});
+
 
 function refineData(data) {
 
