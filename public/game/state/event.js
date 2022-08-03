@@ -84,17 +84,10 @@ function saveScore() {
     })
       .then(res => res.json())
       .then(res => {
-        console.log('insert status', res);  
-
-        divBody.html('');
-
+        showStudy();  
         divResult = createDiv();
         divResult.parent(divBody);
-
         divResult.html(res.msg);
-        image(studyImg,0,0);
-
-        // showStudy();  
       })
       .catch(err => console.log('insert2db', err));
       
@@ -103,6 +96,15 @@ function saveScore() {
 }
 
   function showStudy() {
+    if( qStarted && !qSaved && qYourAnswer.length != 0 ) {
+      let str = `You've started your game.`;
+      str += `\nIf you proceed, the result will be gone.`;
+      str += `\nDo you want to move to Study?`;
+      if (!confirm(str)) {
+        return;
+      }      
+    }    
+
     initGame('USA');  
     qStarted = false;
     image(studyImg,0,0);

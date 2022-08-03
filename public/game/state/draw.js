@@ -284,20 +284,6 @@ function drawNum(n, x, y, size=10) {
 
 
 function clearText() {
-  if( divScore != undefined) {
-     divScore.remove();
-  }
-  if( divStatus != undefined) {
-    divStatus.remove();
-  }
-  if( divQuestion != undefined) {
-    divQuestion.remove();
-  }  
-  if( divAnswer != undefined) {
-    divAnswer.remove();
-  }
-  if( divYourAnswer != undefined) {
-    divYourAnswer.remove();
-  }
+  divBody.html(''); 
 }
 
