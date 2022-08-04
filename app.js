@@ -50,6 +50,8 @@ app.get('/', (req, res) => {
   // }
 });
 
+global.debug = false;
+
 global.checkLogin = (req) => {
   if(req.user == undefined) {
     return false;

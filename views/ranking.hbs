@@ -1,8 +1,8 @@
-<h2>{{caller}} ranking!</h2>
+<h2>{{gamename}} ranking!</h2>
 
 {{#if ranking}}
     {{#each ranking}}
-    {{name}} {{school}} {{hit}} {{wrong}} {{timestamp}} <br>
+    Ranking #{{rank}}, {{name}} from {{school}}, Score : {{score}}, Time : {{date}} <br>
     {{/each}}
 {{else}}
     <h3>No one played yet!</h3>

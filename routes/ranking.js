@@ -1,27 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const tools = require('../lib/tools');
 
 // mongo db
 const { MongoClient } = require("mongodb");
 const uri = process.env.MONGODB_URI || 'mongodb+srv://nextbrain:NsGzoib2VlmnKbTe@cluster0.swhee.mongodb.net/?retryWrites=true&w=majority';
 const dbName = 'nextbrainDB';
 const collName = 'ranking';
-
-
-// middleware that is specific to this router
-// router.use((req, res, next) => {
-//   console.log('/ranking, Time: ', Date.now(), req.method);
-
-//   // if(req.method == 'POST') {
-//   //   console.log('ranking 1');
-//   //   res.redirect('/');
-//   //   console.log('ranking 2');
-//   // }
-//   // else {
-//   //   console.log('ranking 3');
-//   //   next();
-//   // }
-// });
 
 router.get('/nuguri', (req, res) => {
   res.render('ranking', {caller:'nuguri'});
@@ -40,10 +25,10 @@ router.get('/state', (req, res) => {
 
             // find code goes here
             let data = await coll.find().toArray();
-            // res.json(data);
-            console.log('ranking.state', data);
+            let prettyData = tools.prettyData(data);
+            // console.log('ranking.state', 'prettyData', prettyData);
 
-            res.render('ranking', {caller:'state', ranking: data});
+            res.render('ranking', {gamename:'State Challenge', ranking: prettyData});
 
         } finally {
           await mongoClient.close();
@@ -59,13 +44,19 @@ router.post('/state', (req, res) => {
   console.log('/ranking/state','req.body', req.body);
   // res.send('hello, post');
   
-  if( !global.checkLogin(req) ) {
+
+  if( global.debug != true && !global.checkLogin(req) ) {
     let msg = `Due to disconnection, recording your score failed! Please login again!`;
     let retObj = {'result':'0', msg};
     res.json(retObj);
   }
   else {
     const data = req.body;
+
+    data.game = 'state';
+    data.timestamp = Date.now();
+    data.user = req.user.username;
+    data.school = req.user.school;
   
     async function run() {
         const mongoClient = new MongoClient(uri);
@@ -89,9 +80,6 @@ router.post('/state', (req, res) => {
 });
 
 
-function refineData(data) {
-
-}
 
 
 function writeScore(data) {

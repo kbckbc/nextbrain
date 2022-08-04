@@ -15,8 +15,6 @@ let applauseSound;
 let divCountry;
 let btnUsa;
 
-let txtPlayerName;
-let txtSchoolName;
 let divNavi;
 let btnScore;
 let btnStart;
@@ -67,8 +65,6 @@ let currPath = '/game/state';
 
 function preload() {
   // html setting
-  txtPlayerName = select('#txtPlayerName');
-  txtSchoolName = select('#txtSchoolName');
   divNavi = select('#divNavi');
   divBody = select('#divBody');
 

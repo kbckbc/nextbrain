@@ -44,9 +44,6 @@ function setButtonEvent() {
   
 function saveScore() {
   console.log('saveScore');
-  let timestamp = Date.now();
-  // let name = txtPlayerName.value();
-  // let school = txtSchoolName.value();
   let hit = 0, wrong = 0;
   for(let i=0;i<qYourAnswer.length;i++) {
     let correct = qYourAnswer[i][1];
@@ -63,8 +60,7 @@ function saveScore() {
     return;
   }
   let score = hit; // ranking data must have score and timestamp
-  
-  let data = {timestamp, hit, wrong, score};
+  let data = {score, hit, wrong};
   // insertInto(data)
   //   .then(res => {
   //     console.log('Nedb : insert into complete', res);
@@ -89,7 +85,7 @@ function saveScore() {
         divResult.parent(divBody);
         divResult.html(res.msg);
       })
-      .catch(err => console.log('insert2db', err));
+      .catch(err => console.log('saveScore', err));
       
       
   console.log('saveScore complete');
