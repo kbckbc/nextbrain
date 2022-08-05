@@ -1,0 +1,100 @@
+<div class="shadow-sm p-3 mb-5 bg-light rounded">
+  <h3 style="text-align:center">Math</h3>  
+</div>
+
+
+<main>
+<div style="max-width:900px; margin:auto"> 
+  <div id="divOp">
+    <button type="button" class="btn btn-primary " style="width:150px" disabled="">Operation</button>
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+      <input type="radio" class="btn-check" name="btnRadioOp" id="btnOp+" autocomplete="off" value="+" onclick="radioOpClick(this);">
+      <label class="btn btn-outline-primary" for="btnOp+" >Plus</label>
+      <input type="radio" class="btn-check" name="btnRadioOp" id="btnOp-" autocomplete="off" value="-" onclick="radioOpClick(this);">
+      <label class="btn btn-outline-primary" for="btnOp-">Minus</label>
+      <input type="radio" class="btn-check" name="btnRadioOp" id="btnOp**" autocomplete="off" value="**" onclick="radioOpClick(this);">
+      <label class="btn btn-outline-primary" for="btnOp**" style="width:250px">Multiplication Table</label>
+      <input type="radio" class="btn-check" name="btnRadioOp" id="btnOp*" autocomplete="off" value="*" onclick="radioOpClick(this);">
+      <label class="btn btn-outline-primary" for="btnOp*">Multiply</label>
+      <input type="radio" class="btn-check" name="btnRadioOp" id="btnOp/" autocomplete="off" value="/" onclick="radioOpClick(this);">
+      <label class="btn btn-outline-primary" for="btnOp/">Divide</label>
+    </div>  
+  </div>
+  
+
+  <div id="divLvTimes">
+    
+  
+    <span id="spanLv">
+      <button type="button" class="btn btn-primary " style="width:150px" disabled="">Level</button>
+      <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnRadioLv" id="btnLv0" autocomplete="off" value="0" onclick="radioLvClick(this);">
+        <label class="btn btn-outline-primary" for="btnLv0">Lv 1</label>
+        <input type="radio" class="btn-check" name="btnRadioLv" id="btnLv1" autocomplete="off" value="1" onclick="radioLvClick(this);">
+        <label class="btn btn-outline-primary" for="btnLv1">Lv 2</label>
+        <input type="radio" class="btn-check" name="btnRadioLv" id="btnLv2" autocomplete="off" value="2" onclick="radioLvClick(this);">
+        <label class="btn btn-outline-primary" for="btnLv2">Lv 3</label>
+      </div>  
+
+    </span>
+
+    <span id="spanTimes" style="display:none">
+      <button type="button" class="btn btn-primary " style="width:150px" disabled="">Times</button>
+      <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnRadioTimes" id="btnTimes2" autocomplete="off" value="2" onclick="radioTimesClick(this);">
+        <label class="btn btn-outline-primary" for="btnTimes2" style="width:70px;">2</label>
+        <input type="radio" class="btn-check" name="btnRadioTimes" id="btnTimes3" autocomplete="off" value="3" onclick="radioTimesClick(this);">
+        <label class="btn btn-outline-primary" for="btnTimes3" style="width:70px;">3</label>
+        <input type="radio" class="btn-check" name="btnRadioTimes" id="btnTimes4" autocomplete="off" value="4" onclick="radioTimesClick(this);">
+        <label class="btn btn-outline-primary" for="btnTimes4" style="width:70px;">4</label>
+        <input type="radio" class="btn-check" name="btnRadioTimes" id="btnTimes5" autocomplete="off" value="5" onclick="radioTimesClick(this);">
+        <label class="btn btn-outline-primary" for="btnTimes5" style="width:70px;">5</label>
+        <input type="radio" class="btn-check" name="btnRadioTimes" id="btnTimes6" autocomplete="off" value="6" onclick="radioTimesClick(this);">
+        <label class="btn btn-outline-primary" for="btnTimes6" style="width:70px;">6</label>
+        <input type="radio" class="btn-check" name="btnRadioTimes" id="btnTimes7" autocomplete="off" value="7" onclick="radioTimesClick(this);">
+        <label class="btn btn-outline-primary" for="btnTimes7" style="width:70px;">7</label>
+        <input type="radio" class="btn-check" name="btnRadioTimes" id="btnTimes8" autocomplete="off" value="8" onclick="radioTimesClick(this);">
+        <label class="btn btn-outline-primary" for="btnTimes8" style="width:70px;">8</label>
+        <input type="radio" class="btn-check" name="btnRadioTimes" id="btnTimes9" autocomplete="off" value="9" onclick="radioTimesClick(this);">
+        <label class="btn btn-outline-primary" for="btnTimes9" style="width:70px;">9</label>
+      </div>          
+    </span>
+
+    <span>
+      <button type="button" class="btn btn-outline-warning " id="btnCoinLeft" style="display:none" disabled="">Coin Left : 1</button>
+    </span>
+  </div>
+    
+
+  <div >
+    <div id="divResult" style="font-size: 1.3em;margin-top:10px;">
+    </div>
+    
+    <div id="divQuestion" style="display:none;font-size: 1.3em;">
+      
+      <span id="spanQuestion"></span>
+      <input id="inputAnswer" style="width:60px">
+      <label id="labelRemain" style="display:none">Remain</label>
+      <input id="inputRemain" style="width:60px; display:none">
+        
+      <span id="spanSubmit" style="display:none">
+        You can enter or <button type="button" class="btn btn-success btn-sm" id="btnSubmit">Submit</button>
+      </span>
+    </div>
+    
+    <div id="divTryNext" style="display:none">
+      <div id="divCoinMsg" style="color:red;font-size: 1.5em;font-weight: bold;"></div>
+      <button type="button" class="btn btn-danger" id="btnTryAgain">Try again</button>
+      <button type="button" class="btn btn-success" id="btnGoNext">Go Next</button>
+    </div>
+  </div>
+
+
+</div>
+
+</main>
+
+<script src='/math/event.js'></script>
+<script src='/math/util.js'></script>
+<script src='/math/practice.js'></script>
+<script src='/math/math.js'></script>
