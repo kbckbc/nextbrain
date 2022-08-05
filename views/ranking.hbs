@@ -1,32 +1,35 @@
-<h2>{{gamename}} ranking!</h2>
+<div style="width:75%">
 
-{{#if ranking}}
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Ranking</th>
-      <th scope="col">Score</th>
-      <th scope="col">Name</th>
-      <th scope="col">School</th>
-      <th scope="col">Time</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each ranking}}
-    <tr>
-      <th scope="row">{{rank}}</th>
-      <td>{{score}}</td>
-      <td>{{name}}</td>
-      <td>{{school}}</td>
-      <td>{{date}}</td>
-    </tr>
-    {{/each}}
+  <h2>{{gamename}} ranking!</h2>
 
-  </tbody>
-</table>
+  {{#if ranking}}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Ranking</th>
+        <th scope="col">Score</th>
+        <th scope="col">Name</th>
+        <th scope="col">School</th>
+        <th scope="col">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each ranking}}
+      <tr>
+        <th scope="row">{{rank}}</th>
+        <td>{{score}}</td>
+        <td>{{name}}</td>
+        <td>{{school}}</td>
+        <td>{{date}}</td>
+      </tr>
+      {{/each}}
 
-{{else}}
-<h3>No one played yet!</h3>
-<h3>Be the first student challenging this game!</h3>
-{{/if}} 
+    </tbody>
+  </table>
 
+  {{else}}
+  <h3>No one played yet!</h3>
+  <h3>Be the first student challenging this game!</h3>
+  {{/if}} 
+
+</div>
