@@ -1,4 +1,10 @@
-<h1>Sign in</h1>
+
+<div class="card text-center w-50" style="margin:auto">
+  <div class="card-body">
+    <h5 class="card-title">Sign up</h5>
+    <p class="card-text">
+
+
 <form action="/auth/signup" method="post">
     <section>
         <label for="username">Username</label>
@@ -9,7 +15,7 @@
         <input id="password" name="password" type="password" required>
     </section>
     <section>
-        <label for="password2">Password Confirm</label>
+        <label for="password2">Confirm</label>
         <input id="password2" name="password2" type="password" required>
     </section>
     <section>
@@ -42,8 +48,18 @@
     password.onchange = validatePassword;
     password2.onkeyup = validatePassword;
     </script>
-
-    <button type="submit">Sign up</button>
+    <br>
+    <button type="submit" class="btn btn-primary">Sign up</button>
 </form>
+
+    </p>
+  </div>
+</div>
+
+
+
+
+
+
 
 
