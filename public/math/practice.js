@@ -286,7 +286,7 @@ function getAnswerHistory() {
     }
   }
   
-  let summary =`<h4>Total score is ${hit} out of ${qMax}.</h4>`;
+  let summary =`Total score is ${hit} out of ${qMax}.`;
   
   // console.log('qHistory', qHistory);
   // console.log('getAnswerHistory', 'summary', summary);

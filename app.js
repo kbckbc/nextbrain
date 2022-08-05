@@ -52,7 +52,12 @@ app.get('/', (req, res) => {
   // }
 });
 
-global.debug = false;
+app.get('/about', (req, res) => {
+  res.render('about');
+});
+
+
+global.debug = true;
 
 global.checkLogin = (req) => {
   if(req.user == undefined) {

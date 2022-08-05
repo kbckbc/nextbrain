@@ -55,8 +55,14 @@ router.post('/state', (req, res) => {
 
     data.game = 'state';
     data.timestamp = Date.now();
-    data.user = req.user.username;
-    data.school = req.user.school;
+    if( global.debug ) {
+      data.user = 'Guest';
+      data.school = 'Nowhere';
+    }
+    else {
+      data.user = req.user.username;
+      data.school = req.user.school;
+    }
   
     async function run() {
         const mongoClient = new MongoClient(uri);

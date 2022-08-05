@@ -41,51 +41,6 @@ function writeScore(data) {
   divScore.html(scoreStr);      
 }
 
-function writeScoreLocalStorage() {
-  let scoreStr = "<< Score Board with Local Storage >><br>";  
-
-  divScore = createDiv();
-  divScore.parent(divBody);  
-
-  // get saved score from localStorage
-  let scoreArr = loadScoreLocalStorage();
-  
-  // no saved score
-  if( !scoreArr ) {
-    scoreStr += "No one played yet!<br>";
-    scoreStr += "Be the first student challenging this game!<br>";
-  }
-  else {
-    
-    let playerNum = scoreArr.length;
-    scoreStr += `${playerNum} student(s) have challenged this game!<br><br>`;
-    
-    let sortbyNameAscend = scoreArr.slice().sort((a, b) => (a > b ? 1 : -1));
-    let sortbyHitDescend = sortbyNameAscend.slice().sort((a, b) => b.hit - a.hit);
-    
-    let rank = 1;
-    //console.log('scoreArr', scoreArr);  
-    for( let i in sortbyHitDescend ) {
-      let score = sortbyHitDescend[i];
-      let timestamp = score.timestamp;
-      let date = new Date(timestamp).toUTCString(); 
-      let name = score.name;
-      let school = score.school;
-      let hit = score.hit;
-      let wrong = score.wrong;
-      
-      name = name.charAt(0).toUpperCase() + name.slice(1);
-      school = school.charAt(0).toUpperCase() + school.slice(1);
-
-      let lineStr = `Rank #${rank} : ${hit} right answer(s), ${date}, ${name} from ${school}<br>`;
-      
-      scoreStr += lineStr;
-      rank++;
-    }
-  }
-  
-  divScore.html(scoreStr);   
-}
 
 function writeStatus() {
   let str;
@@ -134,7 +89,7 @@ function writeQuestion(key) {
   radioAnswer = createRadio();
   radioAnswer.parent(divAnswer);  
   
-  radioAnswer.style('width', cw+'px');
+  // radioAnswer.style('width', cw+'px');
   
   // In case of next button after returning back from previous question,
   // Do not generate candidate answers again.

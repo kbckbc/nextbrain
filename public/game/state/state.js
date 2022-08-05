@@ -174,7 +174,7 @@ function gameLoop() {
     // if reached at the end
     if( qCurrNum == qQuestions.length ) {
     // if( qCurrNum == 2 ) {
-      saveSore();
+
       drawPastDot();
       writeStatus();
       writeGameEnd();
@@ -243,8 +243,6 @@ function loadScore() {
     .then(data => {
       writeScore(data);
     });
-  
-  // writeScoreLocalStorage(); 
 }
 
 function insertInto(obj) {
@@ -284,4 +282,56 @@ function selectFrom() {
       return res;
     })
     .catch(err => console.log('selectFrom', err));
+}
+
+
+
+
+function saveScore() {
+  console.log('saveScore');
+  let hit = 0, wrong = 0;
+  for(let i=0;i<qYourAnswer.length;i++) {
+    let correct = qYourAnswer[i][1];
+    if( correct == 1) {
+      hit++;
+    }
+    else {
+      wrong++;
+    }
+  }
+  
+  // don's save if score is 0
+  if( hit == 0 ) {
+    return;
+  }
+  let score = hit; // ranking data must have score and timestamp
+  let data = {score, hit, wrong};
+  // insertInto(data)
+  //   .then(res => {
+  //     console.log('Nedb : insert into complete', res);
+  //     document.getElementById('result').value = res.aaa;
+  //     if(res.aaa = 'aaa111' ) {
+  //       window.location.assign('/auth/login');
+  //     }
+  //   })
+
+
+    fetch('/ranking/state', {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(res => {
+        showStudy();  
+        divResult = createDiv();
+        divResult.parent(divBody);
+        divResult.html(res.msg);
+      })
+      .catch(err => console.log('saveScore', err));
+      
+      
+  console.log('saveScore complete');
 }

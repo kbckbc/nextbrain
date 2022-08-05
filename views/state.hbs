@@ -1,20 +1,36 @@
-    <h4>Which country do you wanna try? <button id="btnUsa">USA</button></h4>
-    
-    <div id="divNavi" style="display:none">
-      <button id="btnStudy">Study</button>
-      <button id="btnStart">Start</button>
-      <button id="btnPrev">Prev</button>
-      <button id="btnNext">Next</button>  
-      <button id="btnScore">Save score</button>
-    </div>
-    <div id="divBody">
-    </div>
-    
-    <main>
-    </main>
-   
-    <script src='/game/state/usa_pos.js'></script>
-    <script src='/game/state/util.js'></script>
-    <script src='/game/state/draw.js'></script>
-    <script src='/game/state/event.js'></script>
-    <script src='/game/state/state.js'></script>
+<div class="shadow-sm p-3 mb-5 bg-light rounded">
+  <h3 style="text-align:center">State Challenge</h3>  
+</div>
+
+<div style="max-width:900px; margin:auto"> 
+  <div id="divOp">
+    <button type="button" class="btn btn-primary " style="width:200px" disabled>Which country?</button>
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+      <input type="radio" class="btn-check" name="btnRadioOp" id="btnUsa" onclick="radioPlaceClick(this);">
+      <label class="btn btn-outline-primary" for="btnUsa" >USA</label>
+    </div>  
+  </div>
+
+  <div id="divNavi">
+    <button type="button" class="btn btn-primary " style="width:200px" disabled>Controller</button>
+    <button type="button" class="btn btn-outline-primary" id="btnStudy" >Study</button>
+    <button type="button" class="btn btn-outline-primary" id="btnStart" >Start</button>
+    <button type="button" class="btn btn-outline-primary" id="btnPrev" >Prev</button>
+    <button type="button" class="btn btn-outline-primary" id="btnNext" >Next</button>
+    <button type="button" class="btn btn-outline-primary" id="btnScore" >Save score</button>
+  </div>
+
+  <div id="divBody" style="" class="h5">
+  </div>
+
+</div>
+  
+<main style="text-align:center">
+</main>
+
+<script src='/game/state/usa_pos.js'></script>
+<script src='/game/state/util.js'></script>
+<script src='/game/state/draw.js'></script>
+<script src='/game/state/event.js'></script>
+<script src='/game/state/state.js'></script>
+
