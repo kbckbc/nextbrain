@@ -1,11 +1,32 @@
 <h2>{{gamename}} ranking!</h2>
 
 {{#if ranking}}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Ranking</th>
+      <th scope="col">Score</th>
+      <th scope="col">Name</th>
+      <th scope="col">School</th>
+      <th scope="col">Time</th>
+    </tr>
+  </thead>
+  <tbody>
     {{#each ranking}}
-    Ranking #{{rank}}, {{name}} from {{school}}, Score : {{score}}, Time : {{date}} <br>
+    <tr>
+      <th scope="row">{{rank}}</th>
+      <td>{{score}}</td>
+      <td>{{name}}</td>
+      <td>{{school}}</td>
+      <td>{{date}}</td>
+    </tr>
     {{/each}}
+
+  </tbody>
+</table>
+
 {{else}}
-    <h3>No one played yet!</h3>
-    <h3>Be the first student challenging this game!</h3>
+<h3>No one played yet!</h3>
+<h3>Be the first student challenging this game!</h3>
 {{/if}} 
 
