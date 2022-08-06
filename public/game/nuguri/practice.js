@@ -29,15 +29,6 @@ function initPractice(op = '') {
   else {
     qMax = 5;
   }
-  
-  select('#divResult').show();
-  select('#divQuestion').show();
-  select('#divTryNext').hide();
-  
-  
-  select('#divResult').html('');
-  select('#inputAnswer').value('');
-  select('#inputRemain').value('');
 }
 
 function startQuestion(op, lv, times) {
@@ -385,7 +376,6 @@ function goNextStep() {
 
 
 function resetGame() {
-  clearRadioValue(1);
   initPractice();
   
   // select('#divOp').style('display','block');  
@@ -393,17 +383,7 @@ function resetGame() {
   // select('#divProgressBar').style('display','block');
   // select('#divProgress').style('width','0%');
   
-  
-  select('#divOp').show();
-  select('#divLvTimes').show();
-  select('#divProgress').show();
-  select('#divProgressBar').style('width','0%');
-  
-  select('#divResult').hide();
-  select('#divQuestion').hide();
-  select('#divTryNext').hide();
-  _divCanvas.hide();
-  
+    
   
   // document.getElementById("btnReset").blur();
 }

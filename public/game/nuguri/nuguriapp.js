@@ -1,4 +1,17 @@
-// op, maxdigit(0:1digit, 1:2digit, 2:3digit), jar, spike, enemy
+let _debug= true;
+let _divCanvas;
+
+let qCurr; //current question position
+let qMax; // max question position
+let qHistory = [];
+let digitRange = [[1,9], [10,99], [100,999]];
+let qTimes;
+
+let _w = 900;
+let _h = 400;
+
+let _introSound, _walkSound, _bumpSound, _jumpSound;
+
 const _gameSetting = [
   [['+','-'],0,2,0,0],
   [['+','-'],1,3,0,0],
@@ -15,7 +28,6 @@ const _jarPos = [200, 300, 400, 500, 600];
 const _spikePos = [150, 250, 350, 450, 550];
 const _enemyPos = [300, 450, 600];
 
-let _mode; // 'practice', 'game'
 let _stage;
 
 let _nuguri;
@@ -41,6 +53,76 @@ let _score=0;
 let _time;
 let _timer;
 let _timerPause;
+
+
+
+
+function preload() { 
+  _introSound = loadSound('./res/intro.mp3'); 
+  _walkSound = loadSound('./res/walk.mp3');
+  _bumpSound = loadSound('./res/bump.mp3');
+  _jumpSound = loadSound('./res/jump.mp3');
+}
+
+function setup() {
+  console.log('setup');
+  _divCanvas = createCanvas(_w, _h);
+  _divCanvas.style('margin','auto');
+
+  _stage = 0;
+  
+  
+  resetTimer();  
+  initGameMode(_stage);   
+}
+
+function draw() {
+  background(0,0,0);
+
+ _judge.draw();    
+
+
+  for(let enemy of _enemy) {
+    enemy.update();
+    enemy.draw();
+  }      
+
+  for(let jar of _jar) {
+    jar.update();
+    jar.draw();
+  }
+
+  for(let spike of _spike) {
+    spike.update();
+    spike.draw();
+  }
+  
+  _gate.update();
+  _gate.draw();
+
+  _nuguri.update();
+  _nuguri.checkCollisions(_jar);
+  _nuguri.checkCollisions(_spike);
+  _nuguri.checkCollisions(_enemy);
+  _nuguri.checkCollision(_gate);
+  _nuguri.keyDragging(keyIsDown(LEFT_ARROW), keyIsDown(RIGHT_ARROW));
+  _nuguri.draw();
+  
+  
+  _board.draw();    
+}
+
+
+function keyPressed() {
+
+  _judge.keyPressed(keyCode);
+  _nuguri.keyPressed(keyCode);
+}
+
+
+
+
+
 
 function initTimer() {
   _time = 0;  

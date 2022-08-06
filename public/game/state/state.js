@@ -174,7 +174,7 @@ function gameLoop() {
     // if reached at the end
     if( qCurrNum == qQuestions.length ) {
     // if( qCurrNum == 2 ) {
-
+      saveSore();
       drawPastDot();
       writeStatus();
       writeGameEnd();
@@ -283,8 +283,6 @@ function selectFrom() {
     })
     .catch(err => console.log('selectFrom', err));
 }
-
-
 
 
 function saveScore() {
