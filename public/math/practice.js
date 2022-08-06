@@ -13,7 +13,7 @@ function setHistory() {
   let str = getAnswerHistory();
   // str += '<br>' + "You've got your job done.";
   // str += '<br>' + "Wanna learn more? Press 'Reset' button and Go!";
-  let html = `<div class="shadow-none p-3 mb-5 bg-light rounded">${str}</div>`;
+  let html = `<div class="shadow-none p-3 mb-2 bg-light rounded">${str}</div>`;
   select('#divResult').html(str);
 
 
@@ -286,7 +286,7 @@ function getAnswerHistory() {
     }
   }
   
-  let summary =`Total score is ${hit} out of ${qMax}.`;
+  let summary =`<h2>Total score is ${hit} out of ${qMax}.</h2><br>`;
   
   // console.log('qHistory', qHistory);
   // console.log('getAnswerHistory', 'summary', summary);

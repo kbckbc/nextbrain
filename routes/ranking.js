@@ -9,7 +9,7 @@ const dbName = 'nextbrainDB';
 const collName = 'ranking';
 
 router.get('/nuguri', (req, res) => {
-  res.render('ranking', {caller:'nuguri'});
+  res.render('ranking', {gamename:'Nuguri Math'});
 });
 
 
