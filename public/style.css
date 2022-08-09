@@ -1,15 +1,22 @@
 body {
-  font-family:'Short Stack', sans-serif;
+  font-family:'Changa', 'DM Serif Display', 'Short Stack', sans-serif;
   font-weight:normal;
   font-style:normal;
+  font-size:1.7em;
 }
 
 div {
   margin:auto
 }
 
+a {
+  font-size:1.3em;
+}
+
+
+
 section label {
   display: inline-block;
-  width: 120px;
+  width: 180px;
   text-align: right;
 }

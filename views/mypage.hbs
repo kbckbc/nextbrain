@@ -1,0 +1,48 @@
+{{>pageheader pagename="My page"}}
+
+{{#unless user}}
+<div class="card text-center w-75" style="margin:auto" >
+  <div class="card-body">
+
+    <p></p>Please log in first.</p>
+
+  </div>
+</div>
+{{else}}
+
+
+<div class="card text-center w-75" style="margin:auto" >
+  <div class="card-body">
+
+
+    <form action="/auth/delete" method="post">
+      <section>
+          <label for="username">Username</label>
+          <input type="text" value={{user.username}} disabled>
+      </section>
+      <section>
+          <label for="username">Scholl name</label>
+          <input type="text" value={{user.school}} disabled>
+      </section>
+      <section>
+          <label for="username">Grade</label>
+          <input type="text" value={{user.grade}} disabled>
+      </section>
+      <section>
+          <label for="username">Join date</label>
+          <input type="text" value="{{user.joindate}}"" disabled>
+      </section>
+      <section>
+          <label for="username">Your coin</label>
+          <input type="text" value={{user.coin}} disabled>
+      </section>
+      <br>
+      <button type="submit" class="btn btn-primary btn-lg">Delete my account</button>
+    </form>
+
+
+  </div>
+</div>
+
+
+{{/unless}}

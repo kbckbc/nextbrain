@@ -43,7 +43,7 @@
       <ul class="nav nav-pills">
         {{#if user}}
         <li class="nav-item">
-          <button type="button" class="btn btn-primary">Hi, {{user.username}}</button>
+          <a class="btn btn-primary btn-lg" href="/auth/mypage" role="button">Hi, {{user.username}}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/auth/logout">Log out</a>
@@ -53,12 +53,13 @@
         <li class="nav-item">
           <a class="nav-link" href="/auth/login">Log in</a>
         </li>
-
-        {{/if}}          
-
         <li class="nav-item">
           <a class="nav-link" href="/auth/signup">Sign up</a>
         </li>
+
+        {{/if}}          
+
+
 
       </ul>
 
