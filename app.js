@@ -29,6 +29,7 @@ app.use('/auth', require('./routes/auth')(passport));
 app.use('/math', require('./routes/math'));
 app.use('/game', require('./routes/game'));
 app.use('/ranking', require('./routes/ranking'));
+app.use('/coin', require('./routes/coin'));
 
 
 

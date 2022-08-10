@@ -43,10 +43,13 @@
       <ul class="nav nav-pills">
         {{#if user}}
         <li class="nav-item">
-          <a class="btn btn-primary btn-lg" href="/auth/mypage" role="button">Hi, {{user.username}}</a>
+          <a class="btn btn-primary btn-lg" href="/auth/mypage" role="button">Hi, {{user.username}}! </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/auth/logout">Log out</a>
+          <button id="headercoin" type="button" class="btn btn-outline-primary btn-lg" disabled>Coin : {{user.coin}}</button>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-outline-primary btn-lg" href="/auth/logout" role="button">Log out</a>
         </li>
 
         {{else}}

@@ -61,25 +61,36 @@ function startQuestion(op, lv, times) {
         hit++;
       }
     }
-    let msg = 'All the answers must be correct to get a coin!';
-    if( hit == qMax) {
-      msg = `You've got all correct answers!`;
+    let msg;
+    if( hit != qMax)  {
+      msg = 'All the answers must be correct to get a coin!';
+      select('#divCoinMsg').html(msg);
+    }
+    else {
       let secondIndex = (getOp() == '**') ? getTimes() - 2 : getLv();
-      if( _coinAvailable[getOp()][secondIndex] == 1) {
-        msg += ` Get this coin :)`;
-        
-        // minus coin
-        _coinAvailable[getOp()][secondIndex] = 0;
-        document.getElementById("btnCoinLeft").innerText = 'Coin Left : 0';
+      let coin = _coinAvailable[getOp()][secondIndex];
 
-        addCoin();
-      }
-      else {
-        msg += ` But,, no coin left :(`;
-      }
+      addCoin(coin)
+      .then((data) => {
+        console.log('practice','data', data);
+        if(data.result == true) {
+          msg = `You've got all correct answers!`;
+          msg += `You've earn ${coin} coin(s)`;
+          setHeaderCoin(data.coin);
+
+        }
+        else {
+          msg = `Oh, there's some problem. Coin hasn't updated.`;
+    
+        }
+    
+        select('#divCoinMsg').html(msg);    
+
+      })
+      .catch( err => console.Console(err));
     }
     
-    select('#divCoinMsg').html(msg);
+    
     
     return;
   }

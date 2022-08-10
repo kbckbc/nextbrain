@@ -58,7 +58,7 @@ class Judge {
         
       case JudgeState.UNPAID:
         this.setFont(28, CENTER);
-        text(`${_oneCoin} coin is needed. Want to play? Y or N?`, this.x, this.y);      
+        text(`${_oneCoin} coin(s) per play. Want to play? Y or N?`, this.x, this.y);      
         break;
         
       case JudgeState.NOTENOUGHCOIN:
@@ -132,14 +132,20 @@ class Judge {
         
       case JudgeState.UNPAID:
         if(keyCode == 89 || keyCode == 121) { // y, Y
-          if( useCoin()) {
-            initTimer();
-            
-            this.state = JudgeState.STAGE;
-          }
-          else {
-            this.state = JudgeState.NOTENOUGHCOIN;
-          }
+          useCoin()
+            .then((data) => {
+              if( data.result) {
+                initTimer();
+                
+                this.state = JudgeState.STAGE;
+                setHeaderCoin(data.coin);
+              }
+              else {
+                this.state = JudgeState.NOTENOUGHCOIN;
+              }
+
+            })
+            .catch( err => console.Console(err));
         }
         else if(keyCode == 78 || keyCode == 110) { // n, N
           resetGame();
@@ -209,12 +215,17 @@ class Judge {
       case JudgeState.SPIKE:
       case JudgeState.ENEMY:
         if(keyCode == 89 || keyCode == 121) { // y, Y
-          if( useCoin()) {
-            initGameMode(_stage); 
-          }
-          else {
-            this.state = JudgeState.NOTENOUGHCOIN;
-          }
+          useCoin()
+            .then((data) => {
+              if( data.result) {
+                initGameMode(_stage); 
+                setHeaderCoin(data.coin);
+              }
+              else {
+                this.state = JudgeState.NOTENOUGHCOIN;
+              }
+            })
+            .catch( err => console.Console(err));
         }
         else if(keyCode == 78 || keyCode == 110) { // n, N
           resetGame();

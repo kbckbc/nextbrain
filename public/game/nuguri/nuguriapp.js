@@ -1,4 +1,4 @@
-let _debug= true;
+let _debug= false;
 let _divCanvas;
 
 let qCurr; //current question position
@@ -37,7 +37,7 @@ let _judge;
 // let _spike = [];
 // let _enemy = [];
 
-const _oneCoin = 1;
+const _oneCoin = 2;
 let _coinRemain = 0;
 let _coinAvailable = {
   '+':[1,1,1],
@@ -142,26 +142,6 @@ function resetTimer() {
   // _score= 0; // :)  
 }
 
-function addCoin() {
-  _coinRemain++;
-  document.getElementById("btnCoin").innerText = 'Coin :' + _coinRemain;
-}
-
-function useCoin() {
-  if( _debug ) {
-    return true;
-  } 
-  
-  if( _coinRemain >= _oneCoin) {
-    _coinRemain -= _oneCoin;  
-    document.getElementById("btnCoin").innerText = 'Coin :' + _coinRemain;
-    return true;
-  }
-  return false;
-}
-function getCoin() {
-  return _coinRemain;
-}
 
 function initGameMode(stage=0) {
   _divCanvas.show();

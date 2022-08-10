@@ -51,7 +51,7 @@ router.post('/state', (req, res) => {
     res.json(retObj);
   }
   else {
-    const data = req.body;
+    let data = req.body;
 
     data.game = 'state';
     data.timestamp = Date.now();
@@ -88,45 +88,45 @@ router.post('/state', (req, res) => {
 
 
 
-function writeScore(data) {
-  console.log('data length', data.length);
+// function writeScore(data) {
+//   console.log('data length', data.length);
 
-  let scoreStr = "<< Score Board >><br>";  
+//   let scoreStr = "<< Score Board >><br>";  
 
-  if( data.length == 0) {
-    scoreStr += "No one played yet!<br>";
-    scoreStr += "Be the first student challenging this game!<br>";
-  }
-  else {
-    let playerNum = data.length;
-    scoreStr += `${playerNum} student(s) have challenged this game!<br><br>`;
+//   if( data.length == 0) {
+//     scoreStr += "No one played yet!<br>";
+//     scoreStr += "Be the first student challenging this game!<br>";
+//   }
+//   else {
+//     let playerNum = data.length;
+//     scoreStr += `${playerNum} student(s) have challenged this game!<br><br>`;
     
-    let sortbyNameAscend = data.slice().sort((a, b) => (a.name - b.name));
-    let sortbyHitDescend = sortbyNameAscend.slice().sort((a, b) => b.hit - a.hit);
+//     let sortbyNameAscend = data.slice().sort((a, b) => (a.name - b.name));
+//     let sortbyHitDescend = sortbyNameAscend.slice().sort((a, b) => b.hit - a.hit);
 
-    let rank = 1;
-    //console.log('scoreArr', scoreArr);  
-    for( let i in sortbyHitDescend ) {
-      let score = sortbyHitDescend[i];
-      let timestamp = score.timestamp;
-      let date = new Date(timestamp).toUTCString(); 
-      let name = score.name;
-      let school = score.school;
-      let hit = score.hit;
-      let wrong = score.wrong;
+//     let rank = 1;
+//     //console.log('scoreArr', scoreArr);  
+//     for( let i in sortbyHitDescend ) {
+//       let score = sortbyHitDescend[i];
+//       let timestamp = score.timestamp;
+//       let date = new Date(timestamp).toUTCString(); 
+//       let name = score.name;
+//       let school = score.school;
+//       let hit = score.hit;
+//       let wrong = score.wrong;
       
-      name = name.charAt(0).toUpperCase() + name.slice(1);
-      school = school.charAt(0).toUpperCase() + school.slice(1);
+//       name = name.charAt(0).toUpperCase() + name.slice(1);
+//       school = school.charAt(0).toUpperCase() + school.slice(1);
 
-      let lineStr = `Rank #${rank} : ${hit} right answer(s), ${date}, ${name} from ${school}<br>`;
+//       let lineStr = `Rank #${rank} : ${hit} right answer(s), ${date}, ${name} from ${school}<br>`;
       
-      scoreStr += lineStr;
-      rank++;      
-    }
-  }
+//       scoreStr += lineStr;
+//       rank++;      
+//     }
+//   }
 
-  return scoreStr;
-}
+//   return scoreStr;
+// }
 
 
 

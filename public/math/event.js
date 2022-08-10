@@ -51,7 +51,7 @@ function radioLvClick(myRadio) {
     select('#btnCoinLeft').style('display', 'inline');
 
     let coinLeft = _coinAvailable[getOp()][getLv()];
-    document.getElementById("btnCoinLeft").innerText = 'Coin Left :' + coinLeft;
+    document.getElementById("btnCoinLeft").innerText = 'Coin Available :' + coinLeft;
     
     
     initPractice();
@@ -71,7 +71,7 @@ function radioTimesClick(myRadio) {
     select('#btnCoinLeft').style('display', 'inline');
     
     let coinLeft = _coinAvailable[getOp()][getTimes() -2];
-    document.getElementById("btnCoinLeft").innerText = 'Coin Left :' + coinLeft;
+    document.getElementById("btnCoinLeft").innerText = 'Coin Available :' + coinLeft;
         
     
     initPractice('**');

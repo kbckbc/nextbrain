@@ -66,30 +66,53 @@ module.exports = function (passport) {
   });
 
   router.get('/mypage', function(req, res, next) {
-    console.log('mypage1', req.body);
-    console.log('mypage2', req.user);
-    if(req.user != null ) {
-      // req.user.joindate = new Date(req.user.joindate).toUTCString();
-      req.user.joindate = new Date(req.user.joindate).toISOString().split('T')[0];
-      switch ( req.user.grade ) {
-        case '0':
-          req.user.grade = 'Kindergarten';
-          break;
-        case '1':
-          req.user.grade = 'Elementary';
-          break;
-        case '2':
-          req.user.grade = 'Middle';
-          break;
-        case '3':
-          req.user.grade = 'High';
-          break;
-        case '4':
-          req.user.grade = 'Others';
-          break;
-      }
+    if( req.user == null) {
+      res.render('login');
     }
-    res.render('mypage', {user:req.user});
+    else 
+    {
+      let MongoClient = require('mongodb').MongoClient;
+      const uri = process.env.MONGODB_URI || 'mongodb+srv://nextbrain:NsGzoib2VlmnKbTe@cluster0.swhee.mongodb.net/?retryWrites=true&w=majority';
+  
+      MongoClient.connect(uri, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("nextbrainDB");
+        dbo.collection("user").findOne({username:req.user.username}, function(err, result) {
+          if (err) throw err;
+          db.close();
+
+          console.log('aaaaa', result);
+  
+          if(req.user.password == result.password) {
+  
+            if(req.user != null ) {
+              // req.user.joindate = new Date(req.user.joindate).toUTCString();
+              result.joindate = new Date(req.user.joindate).toISOString().split('T')[0];
+              switch ( req.user.grade ) {
+                case '0':
+                  req.user.grade = 'Kindergarten';
+                  break;
+                case '1':
+                  req.user.grade = 'Elementary';
+                  break;
+                case '2':
+                  req.user.grade = 'Middle';
+                  break;
+                case '3':
+                  req.user.grade = 'High';
+                  break;
+                case '4':
+                  req.user.grade = 'Others';
+                  break;
+              }
+            }
+
+
+            res.render('mypage', {user:result});
+          }
+        });
+      });
+    }
   });
 
   router.post('/delete', function(req, res, next) {
