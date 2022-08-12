@@ -1,5 +1,3 @@
-let _debug = false;
-
 let _divCanvas;
 
 let qCurr; //current question position

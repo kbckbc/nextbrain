@@ -54,5 +54,9 @@ function useCoin() {
 }
 
 function setHeaderCoin(coin) {
-  document.getElementById('headercoin').textContent = `Coin : ${coin}`;
+  let headercoin = document.getElementById('headercoin');
+  if( headercoin != null ) {
+    headercoin.textContent = `Coin : ${coin}`;
+  }
+  
 }

@@ -120,7 +120,7 @@ class Judge {
           this.state = JudgeState.PLAY;
 
           // start timer
-          startTimer(false);
+          startTimer();
           
           // start animation
           _nuguri.noStop();
@@ -139,13 +139,15 @@ class Judge {
                 
                 this.state = JudgeState.STAGE;
                 setHeaderCoin(data.coin);
+
+                _introSound.play();
               }
               else {
                 this.state = JudgeState.NOTENOUGHCOIN;
               }
 
             })
-            .catch( err => console.Console(err));
+            .catch( err => console.log(err));
         }
         else if(keyCode == 78 || keyCode == 110) { // n, N
           resetGame();
@@ -186,10 +188,10 @@ class Judge {
           
           if( this.caller.getAnswer(this.inputTxt)) {
             this.state = JudgeState.SLEEP;
+            startTimer();
 
             _score += this.caller.getScore();
 
-            startTimer();
             // start animation
             _nuguri.noStop();
             for(let enemy of _enemy) {
@@ -198,6 +200,7 @@ class Judge {
           }
           else {
             this.state = JudgeState.WRONG;
+            stopTimer();
           }
         } 
         else {
@@ -215,17 +218,20 @@ class Judge {
       case JudgeState.SPIKE:
       case JudgeState.ENEMY:
         if(keyCode == 89 || keyCode == 121) { // y, Y
-          useCoin()
-            .then((data) => {
-              if( data.result) {
-                initGameMode(_stage); 
-                setHeaderCoin(data.coin);
-              }
-              else {
-                this.state = JudgeState.NOTENOUGHCOIN;
-              }
-            })
-            .catch( err => console.Console(err));
+            initGameMode(_stage); 
+            setHeaderCoin(data.coin);
+
+          // useCoin()
+          //   .then((data) => {
+          //     if( data.result ) {
+          //       initGameMode(_stage); 
+          //       setHeaderCoin(data.coin);
+          //     }
+          //     else {
+          //       this.state = JudgeState.NOTENOUGHCOIN;
+          //     }
+          //   })
+          //   .catch( err => console.Console(err));
         }
         else if(keyCode == 78 || keyCode == 110) { // n, N
           resetGame();

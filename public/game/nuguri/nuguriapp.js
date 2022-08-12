@@ -1,4 +1,3 @@
-let _debug= false;
 let _divCanvas;
 
 let qCurr; //current question position
@@ -71,8 +70,6 @@ function setup() {
 
   _stage = 0;
   
-  
-  resetTimer();  
   initGameMode(_stage);   
 }
 
@@ -120,11 +117,10 @@ function keyPressed() {
 }
 
 
-
-
-
-
 function initTimer() {
+  if( _timer != null) {
+    clearInterval(_timer);
+  }
   _time = 0;  
   _timerPause = true;
   _timer = setInterval(function () {if( !_timerPause) _time++;}, 1000);
@@ -132,16 +128,9 @@ function initTimer() {
 function startTimer() {
   _timerPause = false;
 }
-function stopTimer(i) {
+function stopTimer() {
   _timerPause = true;
 }
-function resetTimer() {
-  _time = 0;
-  clearInterval(_timer);
-  
-  // _score= 0; // :)  
-}
-
 
 function initGameMode(stage=0) {
   _divCanvas.show();
@@ -191,6 +180,4 @@ function initGameMode(stage=0) {
   _gate = new Gate(_w - 30, 0);
   _board = new Board();
   _judge = new Judge(_w/2,_h/2);
-  
-  _introSound.play();
 }

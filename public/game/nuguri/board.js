@@ -1,14 +1,3 @@
-
-function startTimer() {
-  _time = 0;
-  _timer = setInterval(function () {_time++;}, 1000);
-}
-
-function stopTimer() {
-  _time = -1;
-  clearInterval(_timer);
-}
-
 class Board {
   constructor() {
     this.x = 10;

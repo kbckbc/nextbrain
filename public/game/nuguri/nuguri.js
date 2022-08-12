@@ -89,18 +89,18 @@ class Nuguri extends Thing {
         _judge.setState(JudgeState.ASK, obj);
       }
       else if( obj instanceof Gate ) {
-        stopTimer(false);
+        stopTimer();
         
         _judge.setState(JudgeState.GATE, obj);
       }
       else if( obj instanceof Spike ) {
-        stopTimer(false);
+        stopTimer();
         
         _bumpSound.play();
         _judge.setState(JudgeState.SPIKE, obj);
       }
       else if( obj instanceof Enemy ) {
-        stopTimer(false);
+        stopTimer();
         
         _bumpSound.play();
         _judge.setState(JudgeState.ENEMY, obj);

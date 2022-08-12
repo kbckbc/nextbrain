@@ -376,14 +376,5 @@ function goNextStep() {
 
 
 function resetGame() {
-  initPractice();
-  
-  // select('#divOp').style('display','block');  
-  // select('#divLvTimes').style('display','block');  
-  // select('#divProgressBar').style('display','block');
-  // select('#divProgress').style('width','0%');
-  
-    
-  
-  // document.getElementById("btnReset").blur();
+  window.location.replace("/math");
 }
