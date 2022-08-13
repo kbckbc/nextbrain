@@ -79,9 +79,10 @@ function preload() {
   
     
   // canvas setting
-  cw = windowWidth;
-  ch = windowHeight-200;
-  
+  // cw = windowWidth;
+  // ch = windowHeight-200;
+  cw = 1400;
+  ch = 600;
   // resource loading
   let currPath = '/game/state';
   questionImg = loadImage(currPath + '/res/usa_0.png');
@@ -96,6 +97,8 @@ function preload() {
 
 
 function setup() {
+  console.log('windowWidth', windowWidth);
+  console.log('windowHeight', windowHeight);
   cnv = createCanvas(cw, ch);
   questionImg.resize(0,ch);
   studyImg.resize(0,ch);

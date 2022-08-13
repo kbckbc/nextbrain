@@ -81,8 +81,6 @@ module.exports = function (passport) {
           if (err) throw err;
           db.close();
 
-          console.log('aaaaa', result);
-  
           if(req.user.password == result.password) {
   
             if(req.user != null ) {

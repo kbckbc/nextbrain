@@ -1,8 +1,8 @@
 {{>pageheader pagename="State"}}
 
-<div style="max-width:900px; margin:auto"> 
+<div style="max-width:300px; float:left"> 
   <div id="divOp">
-    <button type="button" class="btn btn-primary " style="width:200px" disabled>Which country?</button>
+    <button type="button" class="btn btn-primary " style="width:150px" disabled>Which country?</button>
     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
       <input type="radio" class="btn-check" name="btnRadioOp" id="btnUsa" onclick="radioPlaceClick(this);">
       <label class="btn btn-outline-primary" for="btnUsa" >USA</label>
@@ -10,15 +10,21 @@
   </div>
 
   <div id="divNavi">
-    <button type="button" class="btn btn-primary " style="width:200px" disabled>Controller</button>
+    <button type="button" class="btn btn-primary " style="width:150px" disabled>Mode</button>
     <button type="button" class="btn btn-outline-primary" id="btnStudy" >Study</button>
-    <button type="button" class="btn btn-outline-primary" id="btnStart" >Start</button>
+    <button type="button" class="btn btn-outline-primary" id="btnStart" >Game</button>
+  </div>
+  <div>
+    <button type="button" class="btn btn-primary " style="width:150px" disabled> < > </button>
     <button type="button" class="btn btn-outline-primary" id="btnPrev" >Prev</button>
     <button type="button" class="btn btn-outline-primary" id="btnNext" >Next</button>
+  </div>
+  <div>
+    <button type="button" class="btn btn-primary " style="width:150px" disabled>Record</button>
     <button type="button" class="btn btn-outline-primary" id="btnScore" >Save score</button>
   </div>
 
-  <div id="divBody" style="" class="h5">
+  <div id="divBody" style="" class="h4">
   </div>
 
 </div>
