@@ -41,7 +41,7 @@ app.listen(port, () => {
 
 // home rendering 
 app.get('/', (req, res) => {
-  console.log('app', '/', req.user, 'req.session', req.session);
+  // console.log('app', '/', req.user, 'req.session', req.session);
   res.render('home', {user: checkLogin(req) ? req.user : null});
   // if(checkLogin(req)) {
   //   console.log('app', '/', '1');
@@ -58,7 +58,7 @@ app.get('/about', (req, res) => {
 });
 
 
-global.debug = true;
+global.debug = false;
 
 global.checkLogin = (req) => {
   if(req.user == undefined) {
