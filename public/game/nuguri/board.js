@@ -21,6 +21,6 @@ class Board {
     text(`Left, Right, Space key`, _w - this.x, this.y);  
 
     textAlign(CENTER);
-    text(`Time : ${_time}`, _w/2, this.y);  
+    text(`Time : ${(_timer==null) ? 0 :_time}`, _w/2, this.y);  
   }
 } 

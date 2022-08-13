@@ -7,7 +7,8 @@ const JudgeState = {
   "SPIKE":5,
   "ENEMY":6,
   "UNPAID":7,
-  "NOTENOUGHCOIN":8
+  "NOTENOUGHCOIN":8,
+  "RANK":9
 }
 
 class Judge {
@@ -81,29 +82,36 @@ class Judge {
         text(msg, this.x, this.y);        
         break;
         
-      case JudgeState.WRONG:
-        this.setFont(28, CENTER);
-        msg = 'Wrong Answer :( Try more? Y or N?';
-        text(msg, this.x, this.y);
-        break;
-        
-      case JudgeState.SPIKE:
-        this.setFont(28, CENTER);
-        msg = 'Ouch! Dodge the spikes! Try again(Y/N)?';
-        text(msg, this.x, this.y);        
-        break;
-        
-      case JudgeState.ENEMY:
-        this.setFont(28, CENTER);
-        msg = 'Be careful enemy :( Try more? Y or N?';
-        text(msg, this.x, this.y);        
-        break;
         
       case JudgeState.GATE:
         this.setFont(28, CENTER);
         msg = 'Great Job. Press Enter to Next Lv!';
         text(msg, this.x, this.y);        
-        break;        
+        break;     
+
+      case JudgeState.WRONG:
+      case JudgeState.SPIKE:
+      case JudgeState.ENEMY:
+        this.setFont(28, CENTER);
+        if(this.state == JudgeState.WRONG) {
+          msg = 'Wrong Answer :(';
+          
+        }
+        else if(this.state == JudgeState.SPIKE) {
+          msg = 'Ouch! Dodge the spikes!';
+        }
+        else if(this.state == JudgeState.ENEMY) {
+          msg = 'Be careful of enemies!';
+        }
+        msg += '\nWanna save your score? Y or N?';
+        text(msg, this.x, this.y);
+        break;
+   
+      case JudgeState.RANK:
+        this.setFont(28, CENTER);
+        msg = 'Try more? Y or N?';
+        text(msg, this.x, this.y);
+        break;
       
     }
   }  
@@ -159,20 +167,6 @@ class Judge {
         resetGame();
         break;
         
-      case JudgeState.GATE:
-        if( keyCode == 13) {        
-          this.state = JudgeState.STAGE;
-          
-          this.caller.addScore();
-          _stage++;
-          if(_stage == _maxStage){
-            _stage = 0;
-          }
-          initGameMode(_stage); 
-          
-        }        
-        break;         
-        
       case JudgeState.ASK:
         if( !isKeyAccept(keyCode)) {
           break;
@@ -186,6 +180,7 @@ class Judge {
           // kill jar which called judge
           this.caller.kill();
           
+          // when hit answer
           if( this.caller.getAnswer(this.inputTxt)) {
             this.state = JudgeState.SLEEP;
             startTimer();
@@ -198,6 +193,7 @@ class Judge {
               enemy.noStop();  
             }
           }
+          // when wrong answer
           else {
             this.state = JudgeState.WRONG;
             stopTimer();
@@ -213,29 +209,53 @@ class Judge {
           }
         }        
         break;
+
+      case JudgeState.GATE:
+        if( keyCode == 13) {        
+          this.state = JudgeState.STAGE;
+          
+          this.caller.addScore();
+          _stage++;
+          if(_stage == _maxStage){
+            _stage = 0;
+          }
+          initGameMode(_stage); 
+          
+        }        
+        break;           
         
       case JudgeState.WRONG:
       case JudgeState.SPIKE:
       case JudgeState.ENEMY:
         if(keyCode == 89 || keyCode == 121) { // y, Y
-            initGameMode(_stage); 
-            setHeaderCoin(data.coin);
-
-          // useCoin()
-          //   .then((data) => {
-          //     if( data.result ) {
-          //       initGameMode(_stage); 
-          //       setHeaderCoin(data.coin);
-          //     }
-          //     else {
-          //       this.state = JudgeState.NOTENOUGHCOIN;
-          //     }
-          //   })
-          //   .catch( err => console.Console(err));
+          saveScore();
+          this.state = JudgeState.RANK;
         }
         else if(keyCode == 78 || keyCode == 110) { // n, N
-          resetGame();
-        }          
+          this.state = JudgeState.RANK;
+        }
+        break;
+
+      case JudgeState.RANK:
+        if(keyCode == 89 || keyCode == 121) { // y, Y
+          initGameMode(_stage); 
+          setHeaderCoin(data.coin);
+
+        // useCoin()
+        //   .then((data) => {
+        //     if( data.result ) {
+        //       initGameMode(_stage); 
+        //       setHeaderCoin(data.coin);
+        //     }
+        //     else {
+        //       this.state = JudgeState.NOTENOUGHCOIN;
+        //     }
+        //   })
+        //   .catch( err => console.Console(err));
+      }
+      else if(keyCode == 78 || keyCode == 110) { // n, N
+        resetGame();
+      }            
         break;
     }// switch
     

@@ -245,32 +245,6 @@ function loadScore() {
     });
 }
 
-function insertInto(obj) {
-  console.log('insert into', obj);
-
-  return fetch('/ranking/state', {
-    method:'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body:JSON.stringify(obj)
-  })
-    .then(res => res.json())
-    // .then(window.location.assign('/'))
-    .catch(err => console.log('insert2db', err));
-
-  // Build formData object.
-  // let formData = new FormData();
-  // formData.append('hit', '1');
-  // formData.append('wrong', '1');
-
-  // fetch("/ranking/state",
-  //     {
-  //         body: formData,
-  //         method: "post"
-  //   });  
-}
-
 function selectFrom() {
   // load ranking from database
   return fetch(currPath + '/ranking', {

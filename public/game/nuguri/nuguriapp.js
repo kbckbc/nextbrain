@@ -181,3 +181,35 @@ function initGameMode(stage=0) {
   _board = new Board();
   _judge = new Judge(_w/2,_h/2);
 }
+
+
+
+function saveScore() {
+  console.log('nuguri', 'saveScore', _time, _score, _stage);
+  
+  // don's save if score is 0
+  if( _score == 0 ) {
+    return;
+  }
+
+  let data = {"score":_score, "time":_time, "stage":_stage};
+
+  fetch('/ranking/nuguri', {
+    method:'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body:JSON.stringify(data)
+  })
+    // .then(res => res.json())
+    // .then(res => {
+    //   showStudy();  
+    //   divResult = createDiv();
+    //   divResult.parent(divBody);
+    //   divResult.html(res.msg);
+    // })
+    .catch(err => console.log('saveScore', err));
+      
+      
+  console.log('saveScore complete');
+}

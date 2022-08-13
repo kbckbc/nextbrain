@@ -9,7 +9,72 @@ const dbName = 'nextbrainDB';
 const collName = 'ranking';
 
 router.get('/nuguri', (req, res) => {
-  res.render('ranking', {gamename:'Nuguri Math'});
+  async function run() {
+    const mongoClient = new MongoClient(uri);
+    try {
+        
+        const mongodb = mongoClient.db(dbName);
+        const coll = mongodb.collection(collName);
+
+        // find code goes here
+        let data = await coll.find({"game":"nuguri"}).sort({"score":-1,"timestamp":-1,"user":1}).toArray();
+        // console.log('ranking.state', 'prettyData 1', data);
+        let prettyData = tools.prettyData(data);
+        // console.log('ranking.state', 'prettyData 2', prettyData);
+
+        res.render('ranking', {gamename:'Nuguri Math', ranking: prettyData});
+
+    } finally {
+      await mongoClient.close();
+    }
+  }
+  run().catch(console.dir);  
+
+});
+
+router.post('/nuguri', (req, res) => {
+  // console.log('/ranking/state','req.uesr', req.user);
+  // console.log('/ranking/state','req.body', req.body);
+  
+
+  if( global.debug != true && !global.checkLogin(req) ) {
+    let msg = `Due to disconnection, recording your score failed! Please login again!`;
+    let retObj = {'result':'0', msg};
+    res.json(retObj);
+  }
+  else {
+    let data = req.body;
+
+    data.game = 'nuguri';
+    data.timestamp = Date.now();
+    if( global.debug ) {
+      data.user = 'Guest';
+      data.school = 'Nowhere';
+    }
+    else {
+      data.user = req.user.username;
+      data.school = req.user.school;
+    }
+  
+    async function run() {
+        const mongoClient = new MongoClient(uri);
+        try {
+          const mongodb = mongoClient.db(dbName);
+          const coll = mongodb.collection(collName);
+          // create a document to insert
+          const result = await coll.insertOne(data);
+          let msg = `Your score has been recorded!`;
+          let retObj = {'result':'1', msg, 'insertid':result.insertedId};
+          console.log('/ranking/state', retObj);
+          res.json(retObj);
+          
+        } finally {
+          await mongoClient.close();
+        }
+    }
+    run().catch(console.dir); 
+  }
+
 });
 
 
@@ -24,9 +89,10 @@ router.get('/state', (req, res) => {
             const coll = mongodb.collection(collName);
 
             // find code goes here
-            let data = await coll.find().toArray();
+            let data = await coll.find({"game":"state"}).sort({"score":-1,"timestamp":-1,"user":1}).toArray();
+            // console.log('ranking.state', 'prettyData 1', data);
             let prettyData = tools.prettyData(data);
-            // console.log('ranking.state', 'prettyData', prettyData);
+            // console.log('ranking.state', 'prettyData 2', prettyData);
 
             res.render('ranking', {gamename:'State Challenge', ranking: prettyData});
 
@@ -84,49 +150,6 @@ router.post('/state', (req, res) => {
   }
 
 });
-
-
-
-
-// function writeScore(data) {
-//   console.log('data length', data.length);
-
-//   let scoreStr = "<< Score Board >><br>";  
-
-//   if( data.length == 0) {
-//     scoreStr += "No one played yet!<br>";
-//     scoreStr += "Be the first student challenging this game!<br>";
-//   }
-//   else {
-//     let playerNum = data.length;
-//     scoreStr += `${playerNum} student(s) have challenged this game!<br><br>`;
-    
-//     let sortbyNameAscend = data.slice().sort((a, b) => (a.name - b.name));
-//     let sortbyHitDescend = sortbyNameAscend.slice().sort((a, b) => b.hit - a.hit);
-
-//     let rank = 1;
-//     //console.log('scoreArr', scoreArr);  
-//     for( let i in sortbyHitDescend ) {
-//       let score = sortbyHitDescend[i];
-//       let timestamp = score.timestamp;
-//       let date = new Date(timestamp).toUTCString(); 
-//       let name = score.name;
-//       let school = score.school;
-//       let hit = score.hit;
-//       let wrong = score.wrong;
-      
-//       name = name.charAt(0).toUpperCase() + name.slice(1);
-//       school = school.charAt(0).toUpperCase() + school.slice(1);
-
-//       let lineStr = `Rank #${rank} : ${hit} right answer(s), ${date}, ${name} from ${school}<br>`;
-      
-//       scoreStr += lineStr;
-//       rank++;      
-//     }
-//   }
-
-//   return scoreStr;
-// }
 
 
 
