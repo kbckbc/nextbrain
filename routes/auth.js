@@ -7,7 +7,7 @@ module.exports = function (passport) {
   });
   
   router.post('/login', passport.authenticate('local', {
-    successRedirect: '/game/state',
+    successRedirect: '/',
     failureRedirect: '/auth/login'
   }));
   

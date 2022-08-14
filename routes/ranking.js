@@ -22,7 +22,7 @@ router.get('/nuguri', (req, res) => {
         let prettyData = tools.prettyData(data);
         // console.log('ranking.state', 'prettyData 2', prettyData);
 
-        res.render('ranking', {gamename:'Nuguri Math', ranking: prettyData});
+        res.render('ranking', {gamename:'Squirrel Math', ranking: prettyData});
 
     } finally {
       await mongoClient.close();
