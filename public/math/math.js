@@ -25,6 +25,7 @@ function preload() {
 function setup() {
   _divCanvas = createCanvas(_w, _h);
 
+  globalToast('You can earn coins by solving problems!');
   initEvent();
 }
 

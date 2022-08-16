@@ -1,57 +1,5 @@
-function writeScore(data) {
-  console.log('data length', data.length);
-
-  let scoreStr = "<< Score Board >><br>";  
-
-  divScore = createDiv();
-  divScore.parent(divBody);  
-
-  if( data.length == 0) {
-    scoreStr += "No one played yet!<br>";
-    scoreStr += "Be the first student challenging this game!<br>";
-  }
-  else {
-    let playerNum = data.length;
-    scoreStr += `${playerNum} student(s) have challenged this game!<br><br>`;
-    
-    let sortbyNameAscend = data.slice().sort((a, b) => (a.name - b.name));
-    let sortbyHitDescend = sortbyNameAscend.slice().sort((a, b) => b.hit - a.hit);
-
-    let rank = 1;
-    //console.log('scoreArr', scoreArr);  
-    for( let i in sortbyHitDescend ) {
-      let score = sortbyHitDescend[i];
-      let timestamp = score.timestamp;
-      let date = new Date(timestamp).toUTCString(); 
-      let name = score.name;
-      let school = score.school;
-      let hit = score.hit;
-      let wrong = score.wrong;
-      
-      name = name.charAt(0).toUpperCase() + name.slice(1);
-      school = school.charAt(0).toUpperCase() + school.slice(1);
-
-      let lineStr = `Rank #${rank} : ${hit} right answer(s), ${date}, ${name} from ${school}<br>`;
-      
-      scoreStr += lineStr;
-      rank++;      
-    }
-  }
-
-  divScore.html(scoreStr);      
-}
-
-
 function writeStatus() {
   let str;
-  
-  if( divStatus ) {
-    divStatus.remove();  
-  }
-  
-  
-  divStatus = createDiv();
-  divStatus.parent(divBody);
   let total = qQuestions.length;
   let hit = 0, wrong = 0;
   
@@ -66,30 +14,17 @@ function writeStatus() {
   }
   
   str = 'Total : ' + total + ', Hit : ' + hit + ', Wrong : ' + wrong;
-  divStatus.html(str);  
+
+  select('#cardStatus1').html(str);
+  select('#cardStatus2').html(str);
 }
 
 
 function writeQuestion(key) {
   
-  if( divQuestion ) {
-    divQuestion.remove();  
-  } 
-  
-  let str;
-  
-  divQuestion = createDiv();
-  divQuestion.parent(divBody);
-  str = '#' + (qCurrNum + 1) + ' : Choose the name of the circled state';
-  divQuestion.html(str);
-  
-  divAnswer = createDiv();
-  divAnswer.parent(divBody);
-  
-  radioAnswer = createRadio();
-  radioAnswer.parent(divAnswer);  
-  
-  // radioAnswer.style('width', cw+'px');
+  let str = '#' + (qCurrNum + 1) + ' : Choose the name of the circled state';
+
+  select('#cardQuestion').html(str);
   
   // In case of next button after returning back from previous question,
   // Do not generate candidate answers again.
@@ -114,30 +49,27 @@ function writeQuestion(key) {
       cloneKeys.splice(x,1);  
     }
 
+    let targetId;
     // shuffle the answers and add to the radio button
     shuffleArray(answerSelection);  
     for(let i=0;i<answerSelection.length;i++) {
-      radioAnswer.option(answerSelection[i]);
+      targetId = '#btnA' + (i + 1);
+      select(targetId).html(answerSelection[i]);
     }
 
     prevAnswers = answerSelection.slice();
   }  
   else {
+    let targetId;
+
     for(let i=0;i<prevAnswers.length;i++) {
-      radioAnswer.option(prevAnswers[i]);
+      targetId = '#btnA' + (i + 1);
+      select(targetId).html(prevAnswers[i]);
     }    
   }
 }
 
-function writeYourAnswer() {
-  
-  if( divYourAnswer ) {
-    divYourAnswer.remove();  
-  }  
-  
-  divYourAnswer = createDiv();
-  divYourAnswer.parent(divBody);
-  
+function writePrevAnswer() {
   let str, yourAnswer, correct, correctAnswer;
   if(qYourAnswer.length != 0) {
     yourAnswer = qYourAnswer[qPrevNum][0];
@@ -145,7 +77,7 @@ function writeYourAnswer() {
       correct = 'wrong';
     }
     else {
-      correct = 'right';
+      correct = 'correct';
     }
       
     correctAnswer = qYourAnswer[qPrevNum][2];
@@ -153,14 +85,12 @@ function writeYourAnswer() {
   str = 'Your answer of #'+ (qPrevNum + 1) + ' was ' + yourAnswer;
   str += ' which was ' + correct;
   str += '. The answer was ' + correctAnswer + '.';
-  divYourAnswer.html(str);
+
+  select('#cardPrevQuestion').html(str);
 }
 
 
 function writeGameEnd(){
-  divYourAnswer = createDiv();
-  divYourAnswer.parent(divBody);
-  
   let str;
   let wrong= 0;
   for(let i=0;i<qYourAnswer.length;i++) {
@@ -176,8 +106,8 @@ function writeGameEnd(){
     str = 'Good job! Review the wrong questions and try again.';  
     applauseSound.play();
   }
-  
-  divYourAnswer.html(str);  
+
+  globalToast(str);
 }
 
 
@@ -235,10 +165,5 @@ function drawNum(n, x, y, size=10) {
   overlay.textSize(size);
   overlay.textAlign(CENTER,CENTER);
   overlay.text(n, x, y);
-}
-
-
-function clearText() {
-  divBody.html(''); 
 }
 

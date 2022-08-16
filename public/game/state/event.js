@@ -1,16 +1,31 @@
-function radioPlaceClick(myRadio) {
-  // console.log('radioOpClick', myRadio.value);
-  // alert('USA click');  
+function showStudy() {
+  if( qStarted && !qSaved && qYourAnswer.length != 0 ) {
+    let str = `You've started your game.`;
+    str += `\nIf you proceed, the result will be gone.`;
+    str += `\nDo you want to move to Study?`;
+    if (!confirm(str)) {
+      return;
+    }      
+  }    
+
+  select('#cardSectionNext').hide();
+  select('#cardSectionPrev').hide();  
+
+  initGame('USA');  
+  qStarted = false;
+  image(studyImg,0,0);
 }
 
 
+
+
 function setButtonEvent() {
-  btnUsa.mousePressed(() => {
+  select('#btnUsa').mousePressed(() => {
   });
 
   let str;
   
-  btnScore.mousePressed(() => {
+  select('#btnScore').mousePressed(() => {
     if( !qStarted ) {
       str = `To record your score, start a new game!`;
       alert(str);
@@ -48,46 +63,40 @@ function setButtonEvent() {
   
 
 
-  function showStudy() {
-    if( qStarted && !qSaved && qYourAnswer.length != 0 ) {
-      let str = `You've started your game.`;
-      str += `\nIf you proceed, the result will be gone.`;
-      str += `\nDo you want to move to Study?`;
-      if (!confirm(str)) {
-        return;
-      }      
-    }    
 
-    initGame('USA');  
-    qStarted = false;
-    image(studyImg,0,0);
-  }
-  btnStudy.mousePressed(showStudy);
+  select('#btnStudy').mousePressed(showStudy);
   
-  btnStart.mousePressed(() => {
+  select('#btnStart').mousePressed(() => {
     alert(`Don't forget to click 'Save score' to record your result!`);
     initGame('USA');  
     qStarted = true;
     image(questionImg,0,0); 
+
+    select('#cardSectionNext').show();
+    select('#cardSectionPrev').hide();
   });
   
-  btnPrev.mousePressed(() => {
+  select('#btnPrev').mousePressed(() => {
     if( qPrevNum > 0) {
-      clearText();
-
       qStep = gameStep.GOTO_PREV;
       qPrevNum -= 1;
-    }    
+
+
+      select('#cardSectionNext').hide();
+      select('#cardSectionPrev').show();
+  
+    }   
   });
   
-  btnNext.mousePressed(() => {
+  select('#btnNext').mousePressed(() => {
     // if it hasn't started yet
     if(qStarted == true) {
       if( qPrevNum < qCurrNum && qPrevNum < qQuestions.length -1 ) {
-        clearText();
-
         qPrevNum++;
         if( qPrevNum == qCurrNum ) {
+          select('#cardSectionNext').show();
+          select('#cardSectionPrev').hide();
+
           drawCurrDot(qCurrAnswer);
           writeStatus();
           writeQuestion(qCurrAnswer);
@@ -99,4 +108,22 @@ function setButtonEvent() {
       }
     }    
   });
+
+
+  select('#btnA1').mousePressed(() => {
+    playerAnswer = select('#btnA1').html();
+  });
+  select('#btnA2').mousePressed(() => {
+    playerAnswer = select('#btnA2').html();
+  });
+  select('#btnA3').mousePressed(() => {
+    playerAnswer = select('#btnA3').html();
+  });
+  select('#btnA4').mousePressed(() => {
+    playerAnswer = select('#btnA4').html();
+  });
+  select('#btnA5').mousePressed(() => {
+    playerAnswer = select('#btnA5').html();
+  });
+
 }

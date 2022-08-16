@@ -11,23 +11,7 @@ let wrongSound;
 let perfectSound;
 let applauseSound;
 
-// html 
-let divCountry;
-let btnUsa;
-
-let divNavi;
-let btnScore;
-let btnStart;
-let btnPrev;
-let btnNext;
-
-let divBody;
-let divScore;
-let divStatus;
-let divQuestion;
-let divAnswer;
-let divYourAnswer;
-let radioAnswer;
+let playerAnswer;
 
 
 const qQuestions = Object.keys(USA_STATE);
@@ -36,7 +20,7 @@ let qLeftQuestion;
 
 // question control
 const numOfAddSelection = 4;
-let qStarted = false;
+let qStarted;
 // qStep controls question steps.
 let qStep; 
 
@@ -44,10 +28,12 @@ let qCurrNum;
 let qPrevNum;
 let qCurrAnswer;
 let qYourAnswer = [];
-
+let prevAnswers = [];
 let dotAnimation = 0;
 
 
+
+const currPath = '/game/state';
 const gameStep = Object.freeze({
   "GIVE_QUESTION":1, 
   "CHECK_ANSWER":2, 
@@ -57,34 +43,17 @@ const gameStep = Object.freeze({
 });
 
 
-let prevAnswers = [];
-
-
-let currPath = '/game/state';
-
 
 function preload() {
-  // html setting
-  divNavi = select('#divNavi');
-  divBody = select('#divBody');
-
-  btnUsa = select('#btnUsa');
-  btnScore = select('#btnScore');
-  btnStudy = select('#btnStudy');
-  btnStart = select('#btnStart');
-  btnPrev = select('#btnPrev');
-  btnNext = select('#btnNext');
-  
-  setButtonEvent();
-  
-    
   // canvas setting
   // cw = windowWidth;
   // ch = windowHeight-200;
   cw = 1400;
   ch = 600;
+
+  setButtonEvent();
+  
   // resource loading
-  let currPath = '/game/state';
   questionImg = loadImage(currPath + '/res/usa_0.png');
   studyImg = loadImage(currPath + '/res/usa_1.png');
   correctSound = loadSound(currPath + '/res/correct.mp3');
@@ -111,6 +80,8 @@ function setup() {
   overlay = createGraphics(cw, ch);
   
   console.log('setup complete');
+
+  showStudy();
 }
 
 
@@ -123,7 +94,9 @@ function draw() {
 function gameLoop() {
   // console.log('gameLoop:', 'qStep:' + qStep + ', qCurrNum:' + qCurrNum + ', qPrevNum:' + qPrevNum);
   
-  if( qStarted == false ) return;
+  if( qStarted == false ) {
+    return;
+  }
   
   if( overlay ) {
     image(overlay,0,0);
@@ -135,6 +108,8 @@ function gameLoop() {
     let result = getQuestion(qLeftQuestion);
     let key = result.key;
     qLeftQuestion = result.questionArr;
+    console.log('gameLoop', 'result', result);
+    console.log('gameLoop', 'key', key);
     // console.log('after', qLeftQuestion.length);
 
     drawCurrDot(key);
@@ -168,16 +143,14 @@ function gameLoop() {
   }
   // goto next question state
   else if( qStep == gameStep.GOTO_NEXT) {
-    clearText();
-    
     qCurrNum++;
     qPrevNum = qCurrNum;
     qCurrAnswer = '';
     
     // if reached at the end
-    if( qCurrNum == qQuestions.length ) {
-    // if( qCurrNum == 2 ) {
-      saveSore();
+    // if( qCurrNum == qQuestions.length ) {
+    if( qCurrNum == 2 ) {
+      // saveSore();
       drawPastDot();
       writeStatus();
       writeGameEnd();
@@ -191,7 +164,7 @@ function gameLoop() {
   else if( qStep == gameStep.GOTO_PREV) {
     drawPastDot();
     writeStatus();
-    writeYourAnswer();
+    writePrevAnswer();
     // qStep = 
   }
   // end state
@@ -204,6 +177,7 @@ function initGame(which) {
   qStarted = false;
   qSaved = false; // save score on the ranking
   qStep = gameStep.GIVE_QUESTION;
+  playerAnswer = '';
   qCurrNum = 0;
   qPrevNum = 0;
   qCurrAnswer = '';  
@@ -212,7 +186,6 @@ function initGame(which) {
   qLeftQuestion = Object.keys(USA_STATE);
   cnv.clear();
   overlay.clear();
-  clearText();
 }
 
 function getQuestion(questionArr) {
@@ -224,43 +197,20 @@ function getQuestion(questionArr) {
 }
 
 function checkAnswer() {
-  if(radioAnswer.value() == '') return false;
+  if( playerAnswer == '' ) return false;
   
-  let correct = (qCurrAnswer == radioAnswer.value()) ? 1 : 0;
+  let correct = (qCurrAnswer == playerAnswer) ? 1 : 0;
   if( correct == 0 ) {
     wrongSound.play();
   }
   else {
     correctSound.play();
   }
-  qYourAnswer.push([radioAnswer.value(), correct, qCurrAnswer]);
+  qYourAnswer.push([playerAnswer, correct, qCurrAnswer]);
   
+  playerAnswer = '';
   return true;
 }
-
-
-function loadScore() {
-  initGame();  
-
-  selectFrom()
-    .then(data => {
-      writeScore(data);
-    });
-}
-
-function selectFrom() {
-  // load ranking from database
-  return fetch(currPath + '/ranking', {
-    method:'GET'
-  })
-    .then(res => res.json())
-    .then(res => {
-      console.log('mongodb : select from complete', res);
-      return res;
-    })
-    .catch(err => console.log('selectFrom', err));
-}
-
 
 function saveScore() {
   console.log('saveScore');
@@ -301,9 +251,9 @@ function saveScore() {
       .then(res => res.json())
       .then(res => {
         showStudy();  
-        divResult = createDiv();
-        divResult.parent(divBody);
-        divResult.html(res.msg);
+        // divResult = createDiv();
+        // divResult.parent(divBody);
+        // divResult.html(res.msg);
       })
       .catch(err => console.log('saveScore', err));
       
