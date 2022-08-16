@@ -376,5 +376,5 @@ function goNextStep() {
 
 
 function resetGame() {
-  window.location.replace("/math");
+  window.location.replace("/");
 }

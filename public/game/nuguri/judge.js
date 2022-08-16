@@ -64,7 +64,7 @@ class Judge {
         
       case JudgeState.NOTENOUGHCOIN:
         this.setFont(28, CENTER);
-        text('Not enough coins. Earn coins on Practice mode!', this.x, this.y);      
+        text('Not enough coins.', this.x, this.y);      
         
         break;
         
@@ -140,7 +140,7 @@ class Judge {
         
       case JudgeState.UNPAID:
         if(keyCode == 89 || keyCode == 121) { // y, Y
-          useCoin()
+          useCoin(_oneCoin)
             .then((data) => {
               if( data.result) {
                 initTimer();
@@ -149,6 +149,8 @@ class Judge {
                 setHeaderCoin(data.coin);
 
                 _introSound.play();
+
+                globalToast('Coin used successfully!');
               }
               else {
                 this.state = JudgeState.NOTENOUGHCOIN;

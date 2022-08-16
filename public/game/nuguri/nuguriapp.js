@@ -201,14 +201,11 @@ function saveScore() {
     },
     body:JSON.stringify(data)
   })
-    // .then(res => res.json())
-    // .then(res => {
-    //   showStudy();  
-    //   divResult = createDiv();
-    //   divResult.parent(divBody);
-    //   divResult.html(res.msg);
-    // })
-    .catch(err => console.log('saveScore', err));
+  .then(res => res.json())
+  .then(res => {
+    globalToast('Your Score has been recorded!');
+  })
+  .catch(err => console.log('saveScore', err));
       
       
   console.log('saveScore complete');

@@ -1,6 +1,6 @@
 function writeStatus() {
   let str;
-  let total = qQuestions.length;
+  let total = qLengthOfQuestion;
   let hit = 0, wrong = 0;
   
   for(let i=0;i<qYourAnswer.length;i++) {
@@ -17,6 +17,7 @@ function writeStatus() {
 
   select('#cardStatus1').html(str);
   select('#cardStatus2').html(str);
+  select('#cardStatus3').html(str);
 }
 
 
@@ -107,7 +108,7 @@ function writeGameEnd(){
     applauseSound.play();
   }
 
-  globalToast(str);
+  select('#cardEndGame').html(str);
 }
 
 

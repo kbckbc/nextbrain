@@ -3,21 +3,26 @@ function showStudy() {
     let str = `You've started your game.`;
     str += `\nIf you proceed, the result will be gone.`;
     str += `\nDo you want to move to Study?`;
-    if (!confirm(str)) {
-      return;
-    }      
+
+    globalModal(str, () => {
+      select('#cardSectionNext').hide();
+      select('#cardSectionPrev').hide();  
+      select('#cardSectionEnd').hide();
+    
+      initGame('USA');  
+      qStarted = false;
+      image(studyImg,0,0);
+    });
   }    
 
   select('#cardSectionNext').hide();
   select('#cardSectionPrev').hide();  
+  select('#cardSectionEnd').hide();
 
   initGame('USA');  
   qStarted = false;
-  image(studyImg,0,0);
+  image(studyImg,0,0);  
 }
-
-
-
 
 function setButtonEvent() {
   select('#btnUsa').mousePressed(() => {
@@ -28,13 +33,13 @@ function setButtonEvent() {
   select('#btnScore').mousePressed(() => {
     if( !qStarted ) {
       str = `To record your score, start a new game!`;
-      alert(str);
+      globalToast(str);
     }
     else if( qSaved ) {
       str = `You need to play again to record new score!`;
-      alert(str);
+      globalToast(str);
     }
-    else if( qYourAnswer.length != 0 ) {
+    else {
       let hit = 0, wrong = 0;
       for(let i=0;i<qYourAnswer.length;i++) {
         let correct = qYourAnswer[i][1];
@@ -48,32 +53,48 @@ function setButtonEvent() {
       
       if( hit == 0 ) {
         str = `To record your score, at least hit one question!`
-        alert(str);
+        globalToast(str);
       }
       else {
         let str = `Hit: ${hit}, Wrong: ${wrong}\nDo you want to record your score on the ranking system?`;
-        if (confirm(str)) {
+        globalModal(str, () => {
           saveScore();
           qSaved = true;
-        }      
+        });
       }
     }
   });
-
-  
-
 
 
   select('#btnStudy').mousePressed(showStudy);
   
   select('#btnStart').mousePressed(() => {
-    alert(`Don't forget to click 'Save score' to record your result!`);
-    initGame('USA');  
-    qStarted = true;
-    image(questionImg,0,0); 
+    let str = 'You need a coin to play. Wanna try?';
+    globalModal(str, () => {
+      useCoin(_oneCoin)
+      .then((data) => {
+        // using coin success
+        if(data.result) {
+          setHeaderCoin(data.coin);
 
-    select('#cardSectionNext').show();
-    select('#cardSectionPrev').hide();
+          globalToast(`Coin used successfully. Don't forget to click 'Save score' to record your result!`);
+          initGame('USA');  
+          qStarted = true;
+          image(questionImg,0,0); 
+      
+          select('#cardSectionNext').show();
+          select('#cardSectionPrev').hide();
+          select('#cardSectionEnd').hide();
+    
+        }
+        // using coin fail
+        else {
+          globalToast('Not enough coin');
+        }
+
+      })
+      .catch( err => console.log(err));
+    });
   });
   
   select('#btnPrev').mousePressed(() => {
@@ -84,25 +105,34 @@ function setButtonEvent() {
 
       select('#cardSectionNext').hide();
       select('#cardSectionPrev').show();
-  
+      select('#cardSectionEnd').hide();
     }   
   });
   
   select('#btnNext').mousePressed(() => {
     // if it hasn't started yet
     if(qStarted == true) {
-      if( qPrevNum < qCurrNum && qPrevNum < qQuestions.length -1 ) {
+      console.log('qPrevNum', qPrevNum, 'qCurrNum', qCurrNum, 'qPrevNum', qPrevNum)
+      if( qPrevNum < qCurrNum && qPrevNum < qLengthOfQuestion - 1 ) {
         qPrevNum++;
+
+        // if reaches at the current question
         if( qPrevNum == qCurrNum ) {
           select('#cardSectionNext').show();
           select('#cardSectionPrev').hide();
+          select('#cardSectionEnd').hide();
 
           drawCurrDot(qCurrAnswer);
           writeStatus();
           writeQuestion(qCurrAnswer);
           qStep = gameStep.CHECK_ANSWER;    
         }
+        // if
         else {
+          select('#cardSectionNext').hide();
+          select('#cardSectionPrev').show();
+          select('#cardSectionEnd').hide();
+                    
           qStep = gameStep.GOTO_PREV;
         }
       }

@@ -1,14 +1,38 @@
 <header>
 
+<!-- For Toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast text-bg-info" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
+  <div id="liveToast" class="toast text-bg-warning" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body">
       
       <h4 id="toastText">Toast text here.</h4>
       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
 </div>
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="btnTriggerModal" style="display:none">
+  Launch static backdrop modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <span id="spanModalText"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btnModalClose" data-bs-dismiss="modal" style="display:none">Close</button>
+        <button type="button" class="btn btn-primary" id="btnModalYes">Yes</button>
+        <button type="button" class="btn btn-primary" id="btnModalNo">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">

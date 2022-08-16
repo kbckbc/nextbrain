@@ -2,6 +2,7 @@ let cnv;
 let overlay; // for question animation
 let cw, ch;
 
+const _oneCoin = 1;
 
 // resources
 let sutdyImg;
@@ -11,10 +12,9 @@ let wrongSound;
 let perfectSound;
 let applauseSound;
 
-let playerAnswer;
-
-
 const qQuestions = Object.keys(USA_STATE);
+let qLengthOfQuestion = qQuestions.length;
+// qLengthOfQuestion = 5; // for debugging
 let qLeftQuestion;
 
 
@@ -29,6 +29,7 @@ let qPrevNum;
 let qCurrAnswer;
 let qYourAnswer = [];
 let prevAnswers = [];
+let playerAnswer;
 let dotAnimation = 0;
 
 
@@ -148,12 +149,17 @@ function gameLoop() {
     qCurrAnswer = '';
     
     // if reached at the end
-    // if( qCurrNum == qQuestions.length ) {
-    if( qCurrNum == 2 ) {
+    if( qCurrNum == qLengthOfQuestion ) {
       // saveSore();
       drawPastDot();
       writeStatus();
       writeGameEnd();
+
+
+      select('#cardSectionNext').hide();
+      select('#cardSectionPrev').hide();
+      select('#cardSectionEnd').show();
+        
       qStep = gameStep.GAME_END;
     }
     else {
@@ -241,22 +247,23 @@ function saveScore() {
   //   })
 
 
-    fetch('/ranking/state', {
-      method:'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(res => {
-        showStudy();  
-        // divResult = createDiv();
-        // divResult.parent(divBody);
-        // divResult.html(res.msg);
-      })
-      .catch(err => console.log('saveScore', err));
+  fetch('/ranking/state', {
+    method:'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body:JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    showStudy();  
+    // divResult = createDiv();
+    // divResult.parent(divBody);
+    // divResult.html(res.msg);
+
+    globalToast('Your Score has been recorded!');
+
+  })
+  .catch(err => console.log('saveScore', err));
       
-      
-  console.log('saveScore complete');
 }

@@ -7,13 +7,13 @@ function initEvent() {
   select('#btnTryAgain').mousePressed(() => {
     // console.log('btnTryAgain');
     if( getOp() == "" ) {
-      alert('Choose operation');
+      globalToast('Choose operation');
     }
     else if(getOp() != '**' && getLv() == "") {
-      alert('Choose Level');
+      globalToast('Choose Level');
     }                                                                
     else if(getOp() == '**' && getTimes() == "") {
-      alert('Choose Times');
+      globalToast('Choose Times');
     }                                                                
     else {
       initPractice();
@@ -45,7 +45,7 @@ function radioLvClick(myRadio) {
   // console.log('radioLvClick', myRadio.value);
 
   if(getOp() == "") {
-    alert('Choose operation!');
+    globalToast('Choose operation!');
   }
   else {
     select('#btnCoinLeft').style('display', 'inline');
@@ -65,7 +65,7 @@ function radioTimesClick(myRadio) {
   // console.log('radioLvClick', myRadio.value);
 
   if(getOp() == "") {
-    alert('Choose operation!');
+    globalToast('Choose operation!');
   }
   else {
     select('#btnCoinLeft').style('display', 'inline');

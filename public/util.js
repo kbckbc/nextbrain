@@ -38,7 +38,7 @@ function addCoin(coin) {
   .catch(err => console.log('/util','addCoin', err));
 }
 
-function useCoin() {
+function useCoin(howmuch) {
   return fetch('/coin/inc', {
     method:'POST',
     headers: {
@@ -46,7 +46,7 @@ function useCoin() {
     },
     body:JSON.stringify({
       "type":"dec",
-      "coin":_oneCoin
+      "coin":howmuch
     })
   })
   .then(res => res.json())
@@ -61,11 +61,21 @@ function setHeaderCoin(coin) {
   
 }
 
-
-
 function globalToast(msg) {
   select('#toastText').html(msg);
   const toastLiveExample = document.getElementById('liveToast')
   const toast = new bootstrap.Toast(toastLiveExample)
   toast.show();    
+}
+
+function globalModal(msg, cbYes) {
+  document.getElementById("btnModalYes").onclick = function() {  
+    cbYes();
+    document.getElementById("btnModalClose").click(); 
+  };  
+  document.getElementById("btnModalNo").onclick = function() {  
+    document.getElementById("btnModalClose").click(); 
+  };  
+  select('#spanModalText').html(msg);
+  document.getElementById("btnTriggerModal").click(); 
 }
