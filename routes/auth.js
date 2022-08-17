@@ -10,6 +10,15 @@ module.exports = function (passport) {
     successRedirect: '/',
     failureRedirect: '/auth/login'
   }));
+
+  router.get('/logout', function(req, res, next) {
+    console.log('auth', '/logout 1', req.user, 'req.session', req.session);
+    if (req.session) {
+      req.session.destroy();
+    }
+    console.log('auth', '/logout 2', req.user, 'req.session', req.session);
+    res.redirect('/');
+  });  
   
   router.get('/signup', function(req, res, next) {
     res.render('signup');
@@ -39,31 +48,38 @@ module.exports = function (passport) {
     const dbName = 'nextbrainDB';
     const collName = 'user';
 
+    console.log('111');
+
     async function run() {
       const mongoClient = new MongoClient(uri);
       try {
         const mongodb = mongoClient.db(dbName);
         const coll = mongodb.collection(collName);
         // create a document to insert
-        const result = await coll.insertOne(data);
-        console.log(`A document was inserted with the _id: ${result.insertedId}`);
+        let result = await coll.findOne({"username":req.body.username});
+
+        console.log('222');
+        console.log('findOne', result);
+        if( result != null ) {
+          console.log('333-1');          
+          res.render('signup_re', {"result":0, "msg":`The Username '${req.body.username}' is in use. Try another one again!`});
+        }
+        else {
+          console.log('333-2');
+          result = await coll.insertOne(data);
+          console.log('insertOne', result);
+          res.render('signup_re', {"result":1, "msg":"Your account has been created!"});
+        }
       } finally {
         await mongoClient.close();
       }
     }
     run().catch(console.dir); 
-
-    res.redirect('/');
+    
+    console.log('444');
   });
 
-  router.get('/logout', function(req, res, next) {
-    console.log('auth', '/logout 1', req.user, 'req.session', req.session);
-    if (req.session) {
-      req.session.destroy();
-    }
-    console.log('auth', '/logout 2', req.user, 'req.session', req.session);
-    res.redirect('/');
-  });
+
 
   router.get('/mypage', function(req, res, next) {
     if( req.user == null) {

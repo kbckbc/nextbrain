@@ -33,8 +33,20 @@ app.use('/coin', require('./routes/coin'));
 
 
 
+global.debug = false;
+global.port = 3000;
+global.checkLogin = (req) => {
+  if(req.user == undefined) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+
 // start app
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || global.port;
 app.listen(port, () => {
     console.log(`listening at ${port}`);
 });
@@ -42,7 +54,7 @@ app.listen(port, () => {
 // home rendering 
 app.get('/', (req, res) => {
   // console.log('app', '/', req.user, 'req.session', req.session);
-  res.render('home', {user: checkLogin(req) ? req.user : null});
+  res.render('home', {user: req.user});
   // if(checkLogin(req)) {
   //   console.log('app', '/', '1');
   //   res.render('home', {username:req.user.username});
@@ -56,15 +68,3 @@ app.get('/', (req, res) => {
 app.get('/about', (req, res) => {
   res.render('about');
 });
-
-
-global.debug = false;
-
-global.checkLogin = (req) => {
-  if(req.user == undefined) {
-    return false;
-  }
-  else {
-    return true;
-  }
-}

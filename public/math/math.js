@@ -27,6 +27,7 @@ function setup() {
 
   globalToast('To play a game, earn coins by solving problems after login!');
   initEvent();
+
 }
 
 function draw() {

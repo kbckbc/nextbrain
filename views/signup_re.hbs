@@ -1,0 +1,17 @@
+{{>pageheader pagename="Sign up Result"}}
+
+<div class="card text-center w-75" style="margin:auto" >
+  <div class="card-body">
+    <p class="card-text">
+    {{msg}}
+    </p>
+    {{#if result}}
+        <a class="btn btn-primary btn-lg" role="button" href="/auth/login" >Go to Login</a>
+    {{else}}
+        <a class="btn btn-primary btn-lg" role="button" onclick="window.history.back()">Go Back</a>
+    {{/if}}
+  </div>
+</div>
+
+
+

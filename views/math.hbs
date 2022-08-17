@@ -2,7 +2,22 @@
 
 
 <main>
+
+
 <div style="max-width:750px; margin:auto"> 
+  
+{{#unless user}}
+<div class="card text-center w-100 text-warning" >
+  <div class="card-body">
+    <p class="card-text">
+      You can learn math without Login<br>
+      But you can't get coins while learning!<br> 
+      Plz Sign up to earn coins!
+      </p>
+  </div>
+</div>
+{{/unless}}
+
   <div id="divOp">
     <button type="button" class="btn btn-primary " style="width:150px" disabled="">Operation</button>
     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">

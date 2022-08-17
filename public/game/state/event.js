@@ -36,7 +36,7 @@ function setButtonEvent() {
       globalToast(str);
     }
     else if( qSaved ) {
-      str = `You need to play again to record new score!`;
+      str = `Play again to record a new score!`;
       globalToast(str);
     }
     else {
@@ -89,7 +89,7 @@ function setButtonEvent() {
         }
         // using coin fail
         else {
-          globalToast('Not enough coin');
+          globalToast('Earning coins for playing after Signup!');
         }
 
       })

@@ -153,6 +153,7 @@ class Judge {
                 globalToast('Coin used successfully!');
               }
               else {
+                globalToast('Earning coins for playing after Signup!');
                 this.state = JudgeState.NOTENOUGHCOIN;
               }
 
@@ -165,7 +166,7 @@ class Judge {
         break;
         
       case JudgeState.NOTENOUGHCOIN:
-        this.state = JudgeState.UNPAID;
+        
         resetGame();
         break;
         

@@ -11,8 +11,7 @@ router.use((req, res, next) => {
     console.log('/coin', 'Time: ', Date.now(),'/req.user', req.user);
   
     if(!global.checkLogin(req)) {
-      console.log('/coin', 'login disconnected');
-      res.redirect('/auth/login');
+      res.json({"result":0});
     }
     else {
       console.log('/coin', 'login connected');

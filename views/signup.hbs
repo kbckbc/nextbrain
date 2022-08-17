@@ -3,8 +3,9 @@
 <div class="card text-center w-75" >
   <div class="card-body">
     <p class="card-text">
-
-
+    <h3>When you sign up, you will receive 10 coins.</h3>
+    <br>
+    
     <form action="/auth/signup" method="post">
         <section>
             <label for="username">Username</label>
@@ -37,7 +38,6 @@
         <script>
         let password = document.getElementById('password');
         let password2 = document.getElementById('password2');
-        console.log('aaa');
         function validatePassword() {
             if ((password2.value!='')&&(password.value != password2.value)) {
                 document.getElementById('errorMsg').innerHTML=`Passwords Don\'t Match`;
