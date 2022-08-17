@@ -30,7 +30,7 @@ module.exports = function (passport) {
     // prepare user data
     let data = req.body;
     data.joindate = Date.now();
-    data.coin = 0;
+    data.coin = 10;
     
 
     var bcrypt = require('bcryptjs');
@@ -104,23 +104,24 @@ module.exports = function (passport) {
               result.joindate = new Date(req.user.joindate).toISOString().split('T')[0];
               switch ( req.user.grade ) {
                 case '0':
-                  req.user.grade = 'Kindergarten';
+                  result.grade = 'Kindergarten';
                   break;
                 case '1':
-                  req.user.grade = 'Elementary';
+                  result.grade = 'Elementary';
                   break;
                 case '2':
-                  req.user.grade = 'Middle';
+                  result.grade = 'Middle School';
                   break;
                 case '3':
-                  req.user.grade = 'High';
+                  result.grade = 'High School';
                   break;
                 case '4':
-                  req.user.grade = 'Others';
+                  result.grade = 'Others';
                   break;
               }
             }
 
+            console.log('aaaaaa',result);
 
             res.render('mypage', {user:result});
           }
