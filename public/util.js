@@ -25,11 +25,11 @@ function shuffleArray(array) {
 
 function addCoin(coin) {
   return fetch('/coin/inc', {
-    method:'POST',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body:JSON.stringify({
+    body: JSON.stringify({
       "type":"inc",
       "coin":coin
     })

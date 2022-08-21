@@ -1,41 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const tools = require('../lib/tools');
-
-// mongo db
-const { MongoClient } = require("mongodb");
-const uri = process.env.MONGODB_URI || 'mongodb+srv://nextbrain:NsGzoib2VlmnKbTe@cluster0.swhee.mongodb.net/?retryWrites=true&w=majority';
-const dbName = 'nextbrainDB';
 const collName = 'ranking';
 
 router.get('/nuguri', (req, res) => {
-  async function run() {
-    const mongoClient = new MongoClient(uri);
-    try {
-        
-        const mongodb = mongoClient.db(dbName);
-        const coll = mongodb.collection(collName);
-
-        // find code goes here
-        let data = await coll.find({"game":"nuguri"}).sort({"score":-1,"timestamp":-1,"user":1}).toArray();
-        // console.log('ranking.state', 'prettyData 1', data);
-        let prettyData = tools.prettyData(data);
-        // console.log('ranking.state', 'prettyData 2', prettyData);
-
-        res.render('ranking', {gamename:'Squirrel Math', ranking: prettyData});
-
-    } finally {
-      await mongoClient.close();
-    }
-  }
-  run().catch(console.dir);  
-
+  tools.getDb(collName)
+    .then((coll) => {
+      coll.find({"game":"nuguri"}).sort({"score":-1,"timestamp":-1,"user":1}).toArray()
+        .then(data => {
+          let prettyData = tools.prettyData(data);
+          res.render('ranking', {user:req.user, gamename:'Squirrel Math', ranking: prettyData});
+        })
+        .catch(err => console.log(err));
+    })    
+    .catch(err => console.log(err));
 });
 
 router.post('/nuguri', (req, res) => {
   // console.log('/ranking/state','req.uesr', req.user);
   // console.log('/ranking/state','req.body', req.body);
-  
 
   if( global.debug != true && !global.checkLogin(req) ) {
     let msg = `Due to disconnection, recording your score failed! Please login again!`;
@@ -45,6 +28,7 @@ router.post('/nuguri', (req, res) => {
   else {
     let data = req.body;
 
+    // insert some information into the data object
     data.game = 'nuguri';
     data.timestamp = Date.now();
     if( global.debug ) {
@@ -55,61 +39,42 @@ router.post('/nuguri', (req, res) => {
       data.user = req.user.username;
       data.school = req.user.school;
     }
-  
-    async function run() {
-        const mongoClient = new MongoClient(uri);
-        try {
-          const mongodb = mongoClient.db(dbName);
-          const coll = mongodb.collection(collName);
-          // create a document to insert
-          const result = await coll.insertOne(data);
-          let msg = `Your score has been recorded!`;
-          let retObj = {'result':'1', msg, 'insertid':result.insertedId};
-          console.log('/ranking/state', retObj);
-          res.json(retObj);
-          
-        } finally {
-          await mongoClient.close();
-        }
-    }
-    run().catch(console.dir); 
-  }
 
+    tools.getDb(collName)
+      .then((coll) => {
+        coll.insertOne(data)
+          .then(result => {
+            let msg = `Your score has been recorded!`;
+            let retObj = {'result':'1', msg, 'insertid':result.insertedId};
+            console.log('/ranking/state', retObj);
+            res.json(retObj);
+          })
+          .catch(err => console.log(err));
+      })    
+      .catch(err => console.log(err));    
+  }
 });
 
 
 router.get('/state', (req, res) => {
-    console.log('Got a request : ranking, GET');
+  console.log('Got a request : ranking, GET');
 
-    async function run() {
-        const mongoClient = new MongoClient(uri);
-        try {
-            
-            const mongodb = mongoClient.db(dbName);
-            const coll = mongodb.collection(collName);
-
-            // find code goes here
-            let data = await coll.find({"game":"state"}).sort({"score":-1,"timestamp":-1,"user":1}).toArray();
-            // console.log('ranking.state', 'prettyData 1', data);
-            let prettyData = tools.prettyData(data);
-            // console.log('ranking.state', 'prettyData 2', prettyData);
-
-            res.render('ranking', {gamename:'State Challenge', ranking: prettyData});
-
-        } finally {
-          await mongoClient.close();
-        }
-    }
-    run().catch(console.dir); 
-
+  tools.getDb(collName)
+    .then((coll) => {
+      coll.find({"game":"state"}).sort({"score":-1,"timestamp":-1,"user":1}).toArray()
+        .then(data => {
+          let prettyData = tools.prettyData(data);
+          res.render('ranking', {user:req.user, gamename:'State Challenge', ranking: prettyData});
+        })
+        .catch(err => console.log(err));
+    })    
+    .catch(err => console.log(err));  
 });
 
 
 router.post('/state', (req, res) => {
-  console.log('/ranking/state','req.uesr', req.user);
-  console.log('/ranking/state','req.body', req.body);
-  // res.send('hello, post');
-  
+  // console.log('/ranking/state','req.uesr', req.user);
+  // console.log('/ranking/state','req.body', req.body);
 
   if( global.debug != true && !global.checkLogin(req) ) {
     let msg = `Due to disconnection, recording your score failed! Please login again!`;
@@ -119,6 +84,7 @@ router.post('/state', (req, res) => {
   else {
     let data = req.body;
 
+    // insert some information into the data object
     data.game = 'state';
     data.timestamp = Date.now();
     if( global.debug ) {
@@ -129,28 +95,20 @@ router.post('/state', (req, res) => {
       data.user = req.user.username;
       data.school = req.user.school;
     }
-  
-    async function run() {
-        const mongoClient = new MongoClient(uri);
-        try {
-          const mongodb = mongoClient.db(dbName);
-          const coll = mongodb.collection(collName);
-          // create a document to insert
-          const result = await coll.insertOne(data);
-          let msg = `Your score has been recorded!`;
-          let retObj = {'result':'1', msg, 'insertid':result.insertedId};
-          console.log('/ranking/state', retObj);
-          res.json(retObj);
-          
-        } finally {
-          await mongoClient.close();
-        }
-    }
-    run().catch(console.dir); 
+
+    tools.getDb(collName)
+      .then((coll) => {
+        coll.insertOne(data)
+          .then(result => {
+            let msg = `Your score has been recorded!`;
+            let retObj = {'result':'1', msg, 'insertid':result.insertedId};
+            console.log('/ranking/state', retObj);
+            res.json(retObj);
+          })
+          .catch(err => console.log(err));
+      })    
+      .catch(err => console.log(err));        
   }
-
 });
-
-
 
 module.exports = router;
