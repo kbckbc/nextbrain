@@ -210,3 +210,107 @@ function saveScore() {
       
   console.log('saveScore complete');
 }
+
+
+
+
+function getQuestion(num, op, lv, times) {
+  let question = '';
+  
+  if( op == '**') {
+    digit = 0; // for one digit.
+  }
+  else {
+    digit = lv;
+
+  }
+  // originally, 3terms was available, but it's too hard. so remove it.
+  term = 2; 
+
+  // console.log('getQuestion', num, op, digit, term, times);
+  
+  let x,y,z;
+  let answer = 0;
+  let remain = 0;
+  
+
+  // Get random x,y,z
+  for(let i=0; i<term; i++) {
+    // first term
+    if( i== 0 ) {
+      x = randomInt(digitRange[digit]);
+      answer = x;
+    }
+    // second term
+    else if( i == 1) {
+      if( op == '*' || op == '/') {
+        // second random value is one digit otherwise too difficult.
+        y = randomInt(digitRange[0]);  
+      }
+      else {
+        // to make it easy
+        if( digit == 2) {
+          digit = 1;
+        }        
+        y = randomInt(digitRange[digit]);
+        if( x < y) {
+          y = randomInt([1, x]);
+        }
+      }
+    }
+    // third term
+    else if( i == 2) {
+      z = randomInt(digitRange[digit]);
+    }
+  }
+  
+  // when division, make there's no remain
+  if( op == '/') {
+    let re = x % y;
+    x -= re;
+    if( x == 0) {
+      x = y;
+    }
+  }
+  
+  // But in ttimes tables, diff logic
+  if( op == '+' ){
+    answer = x + y;
+    answer += (term == 3) ? z : 0; 
+  }
+  else if( op == '-') {
+    answer = x - y;
+    answer -= (term == 3) ? z : 0;
+  }
+  else if( op == '*') {
+    answer = x * y;
+    answer *= (term == 3) ? z : 1;
+  }
+  else if( op == '**') {
+    x = times;
+    y = random(qTimes);
+    let pos = qTimes.indexOf(y);
+    qTimes.splice(pos, 1);
+    answer = x * y;
+  }
+  else if( op == '/') {
+    answer = floor(x / y);
+    remain = x % y;
+  }
+  
+  question += String(x);
+  question += (op == '**') ? '*' : op;
+  question += String(y);
+  if(term == 3) {
+    question += operation;
+    question += String(z);
+  }
+  
+  // console.log('#',num,'x,y,z,question, answer, remain', x,y,z,question, answer, remain);
+
+  return {num, op, question, answer, remain};
+}
+
+function resetGame() {
+  window.location.replace("/");
+}
