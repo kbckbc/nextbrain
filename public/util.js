@@ -53,7 +53,7 @@ function useCoin(howmuch) {
   .catch(err => console.log('/util','useCoin', err));
 }
 
-function setHeaderCoin(coin) {
+function updateCoinHeaderPage(coin) {
   let headercoin = document.getElementById('headercoin');
   if( headercoin != null ) {
     headercoin.textContent = `Coin : ${coin}`;

@@ -146,7 +146,7 @@ class Judge {
                 initTimer();
                 
                 this.state = JudgeState.STAGE;
-                setHeaderCoin(data.coin);
+                updateCoinHeaderPage(data.coin);
 
                 _introSound.play();
 
@@ -242,19 +242,7 @@ class Judge {
       case JudgeState.RANK:
         if(keyCode == 89 || keyCode == 121) { // y, Y
           initGameMode(_stage); 
-          setHeaderCoin(data.coin);
-
-        // useCoin()
-        //   .then((data) => {
-        //     if( data.result ) {
-        //       initGameMode(_stage); 
-        //       setHeaderCoin(data.coin);
-        //     }
-        //     else {
-        //       this.state = JudgeState.NOTENOUGHCOIN;
-        //     }
-        //   })
-        //   .catch( err => console.Console(err));
+          updateCoinHeaderPage(data.coin);
       }
       else if(keyCode == 78 || keyCode == 110) { // n, N
         resetGame();

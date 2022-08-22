@@ -75,7 +75,7 @@ function setButtonEvent() {
       .then((data) => {
         // using coin success
         if(data.result) {
-          setHeaderCoin(data.coin);
+          updateCoinHeaderPage(data.coin);
 
           globalToast(`Coin used successfully. Don't forget to click 'Save score' to record your result!`);
           initGame('USA');  

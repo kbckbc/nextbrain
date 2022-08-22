@@ -65,7 +65,9 @@ function startQuestion(op, lv, times) {
       }
     }
     
-    select('#divCoinMsg').html(msg);
+    globalToast(msg);
+
+    select('#').html(msg);
     
     return;
   }

@@ -15,10 +15,6 @@ function setHistory() {
   // str += '<br>' + "Wanna learn more? Press 'Reset' button and Go!";
   let html = `<div class="shadow-none p-3 mb-2 bg-light rounded">${str}</div>`;
   select('#divResult').html(str);
-
-
-  
-
 }
 
 function initPractice(op = '') {
@@ -64,7 +60,7 @@ function startQuestion(op, lv, times) {
     let msg;
     if( hit != qMax)  {
       msg = 'All the answers must be correct to get a coin!';
-      select('#divCoinMsg').html(msg);
+      globalToast(msg);
     }
     else {
       let secondIndex = (getOp() == '**') ? getTimes() - 2 : getLv();
@@ -72,25 +68,19 @@ function startQuestion(op, lv, times) {
 
       addCoin(coin)
       .then((data) => {
-        console.log('practice','data', data);
         if(data.result == true) {
           msg = `You've got all correct answers!`;
-          msg += `You've earn ${coin} coin(s)`;
-          setHeaderCoin(data.coin);
-
+          msg += ` You've earn ${coin} coin(s)`;
+          updateCoinHeaderPage(data.coin);
         }
         else {
-          msg = `Oh, there's some problem. Coin hasn't updated.`;
-    
+          msg = data.msg;
         }
     
-        select('#divCoinMsg').html(msg);    
-
+        globalToast(msg);
       })
       .catch( err => console.Console(err));
     }
-    
-    
     
     return;
   }

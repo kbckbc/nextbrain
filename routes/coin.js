@@ -12,7 +12,7 @@ router.use((req, res, next) => {
     // console.log('/coin', 'Time: ', Date.now(),'/req.user', req.user);
   
     if(!global.checkLogin(req)) {
-      res.json({"result":0});
+      res.json({"result":false, "msg":"You should signup to get a coin."});
     }
     else {
       next();
@@ -33,10 +33,10 @@ router.post('/inc', (req, res) => {
   async function run() {
     try {
       const coll = await tools.getDb("user");
-      // create a document to insert
       let dbresult;
-      let result = {"result":false};
-
+      let result = {"result":false,"coin":0, "msg":"Oh, there's some problem. Coin hasn't updated."};
+      
+      // increase coin
       if( req.body.type == 'inc') {
         dbresult = await coll.updateOne(
           {"username":req.user.username},
@@ -46,9 +46,10 @@ router.post('/inc', (req, res) => {
         if(dbresult.modifiedCount == 1) {
           // update session coin info
           req.user.coin += req.body.coin;  
-          result = {"result":true,"coin":req.user.coin};
+          result = {"result":true,"coin":req.user.coin,"msg":"success"};
         }
       }
+      // decrease coin
       else {
         dbresult = await coll.findOneAndUpdate(
           {"username":req.user.username, "coin":{$gte:req.body.coin}},
@@ -58,7 +59,7 @@ router.post('/inc', (req, res) => {
         if(dbresult.ok == 1 && dbresult.value != null) {
           // update session coin info
           req.user.coin -= req.body.coin;  
-          result = {"result":true,"coin":req.user.coin};
+          result = {"result":true,"coin":req.user.coin,"msg":"success"};
         }          
       }
       // console.log('coin','inc','dbresult',dbresult);
