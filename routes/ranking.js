@@ -6,10 +6,10 @@ const collName = 'ranking';
 router.get('/nuguri', (req, res) => {
   tools.getDb(collName)
     .then((coll) => {
-      coll.find({"game":"nuguri"}).sort({"score":-1,"timestamp":-1,"user":1}).toArray()
+      coll.find({"game":"nuguri"}).sort({"score":-1,"timestamp":-1,"user":1,"stage":-1,"time":1}).toArray()
         .then(data => {
           let prettyData = tools.prettyData(data);
-          res.render('ranking', {user:req.user, gamename:'Squirrel Math', ranking: prettyData});
+          res.render('ranking', {user:req.user, gamename:'Squirrel Math',nuguri:"1", ranking: prettyData});
         })
         .catch(err => console.log(err));
     })    
@@ -61,10 +61,10 @@ router.get('/state', (req, res) => {
 
   tools.getDb(collName)
     .then((coll) => {
-      coll.find({"game":"state"}).sort({"score":-1,"timestamp":-1,"user":1}).toArray()
+      coll.find({"game":"state"}).sort({"score":-1,"timestamp":-1,"user":1,"wrong":1}).toArray()
         .then(data => {
           let prettyData = tools.prettyData(data);
-          res.render('ranking', {user:req.user, gamename:'State Challenge', ranking: prettyData});
+          res.render('ranking', {user:req.user, gamename:'State Challenge',state:"1", ranking: prettyData});
         })
         .catch(err => console.log(err));
     })    

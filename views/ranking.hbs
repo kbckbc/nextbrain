@@ -4,38 +4,72 @@
 
   
 
-  {{#if ranking}}
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Ranking</th>
-        <th scope="col">Score</th>
-        <th scope="col">Name</th>
-        <th scope="col">School</th>
-        <th scope="col">Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each ranking}}
-      <tr>
-        <th scope="row">{{rank}}</th>
-        <td>{{score}}</td>
-        <td>{{name}}</td>
-        <td>{{school}}</td>
-        <td>{{date}}</td>
-      </tr>
-      {{/each}}
+{{#if ranking}}
 
-    </tbody>
-  </table>
+{{#if nuguri}}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Ranking</th>
+      <th scope="col">Score</th>
+      <th scope="col">Stage</th>
+      <th scope="col">Time</th>      
+      <th scope="col">Name</th>
+      <th scope="col">School</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each ranking}}
+    <tr>
+      <th scope="row">{{rank}}</th>
+      <td>{{score}}</td>
+      <td>{{stage}}</td>
+      <td>{{time}}</td>
+      <td>{{name}}</td>
+      <td>{{school}}</td>
+      <td>{{date}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{/if}}
 
-  {{else}}
-  <div style="text-align:center">
-  No one played yet!
-  <br>
-  Be the first student challenging this game!
+{{#if state}}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Ranking</th>
+      <th scope="col">Score</th>
+      <th scope="col">Wrong</th>
+      <th scope="col">Name</th>
+      <th scope="col">School</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each ranking}}
+    <tr>
+      <th scope="row">{{rank}}</th>
+      <td>{{score}}</td>
+      <td>{{wrong}}</td>
+      <td>{{name}}</td>
+      <td>{{school}}</td>
+      <td>{{date}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{/if}}
 
-  </div>
-  {{/if}} 
+
+{{else}}
+<div style="text-align:center">
+No one played yet!
+<br>
+Be the first student challenging this game!
+
+</div>
+{{/if}} 
 
 </div>

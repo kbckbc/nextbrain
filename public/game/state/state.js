@@ -1,7 +1,7 @@
 let cnv;
 let cw, ch;
 
-const _oneCoin = 1;
+const _oneCoin = 2;
 
 // resources
 let sutdyImg;
