@@ -1,5 +1,4 @@
 let cnv;
-let overlay; // for question animation
 let cw, ch;
 
 const _oneCoin = 1;
@@ -78,13 +77,11 @@ function setup() {
   cw = questionImg.width;
   ch = questionImg.height;
   resizeCanvas(cw,ch);
-  overlay = createGraphics(cw, ch);
   
   console.log('setup complete');
 
   showStudy();
 }
-
 
 function draw() {
   gameLoop();  
@@ -96,12 +93,13 @@ function gameLoop() {
   // console.log('gameLoop:', 'qStep:' + qStep + ', qCurrNum:' + qCurrNum + ', qPrevNum:' + qPrevNum);
   
   if( qStarted == false ) {
+    image(studyImg,0,0);
     return;
   }
-  
-  if( overlay ) {
-    image(overlay,0,0);
+  else {
+    image(questionImg,0,0);
   }
+
   
   // questioning state
   if( qStep == gameStep.GIVE_QUESTION ) {
@@ -109,12 +107,11 @@ function gameLoop() {
     let result = getQuestion(qLeftQuestion);
     let key = result.key;
     qLeftQuestion = result.questionArr;
-    console.log('gameLoop', 'result', result);
-    console.log('gameLoop', 'key', key);
+    // console.log('gameLoop', 'result', result);
+    // console.log('gameLoop', 'key', key);
     // console.log('after', qLeftQuestion.length);
 
-    drawCurrDot(key);
-    drawPastDot();
+    // drawPastDot();
     writeStatus();
     writeQuestion(key);
     qCurrAnswer = key;
@@ -123,6 +120,8 @@ function gameLoop() {
   }
   // answer checking state
   else if( qStep == gameStep.CHECK_ANSWER) {
+    drawPastDot();
+
     dotAnimation++;
     let c;
     if( dotAnimation <= 50){
@@ -134,7 +133,9 @@ function gameLoop() {
     else {
       dotAnimation = 0;
     }
+    drawLine(qCurrAnswer);
     drawCurrDot(qCurrAnswer, c);
+
 
     // if answer has been placed, goto next step
     if(checkAnswer()) {
@@ -150,7 +151,6 @@ function gameLoop() {
     
     // if reached at the end
     if( qCurrNum == qLengthOfQuestion ) {
-      // saveSore();
       drawPastDot();
       writeStatus();
       writeGameEnd();
@@ -168,6 +168,8 @@ function gameLoop() {
   }
   // show prev result state
   else if( qStep == gameStep.GOTO_PREV) {
+
+    drawLine(qYourAnswer[qPrevNum][2]);
     drawPastDot();
     writeStatus();
     writePrevAnswer();
@@ -175,7 +177,9 @@ function gameLoop() {
   }
   // end state
   else if( qStep == gameStep.GAME_END) {
-
+    drawPastDot();
+    writeStatus();
+    writeGameEnd();
   }
 }
 
@@ -191,7 +195,6 @@ function initGame(which) {
   prevAnswers = [];
   qLeftQuestion = Object.keys(USA_STATE);
   cnv.clear();
-  overlay.clear();
 }
 
 function getQuestion(questionArr) {

@@ -112,7 +112,7 @@ function writeGameEnd(){
 }
 
 
-function drawCurrDot(state = '', c = color(255,0,0) ) {
+function drawCurrDot(state = '', c = color(0,0,255), size = 10 ) {
   let answer, x, y;
   let pos = [];
   
@@ -122,9 +122,29 @@ function drawCurrDot(state = '', c = color(255,0,0) ) {
     x = map(pos[0],0,1400,0,cw);
     y = map(pos[1],0,860,0, ch);
 
-    drawO(x,y,c);
-    drawNum(qCurrNum+1, x,y);
-    
+    drawO(x,y,c, size);
+    // drawNum(qCurrNum+1, x,y);
+  }
+}
+
+function drawLine(state, c = color(255,0,0)) {
+  let x, y;
+  let pos = [];
+  
+  // draw current dot
+  if(state != '') {
+    pos = USA_STATE[state];
+    x = map(pos[0],0,1400,0,cw);
+    y = map(pos[1],0,860,0, ch);
+
+    stroke(c);
+    strokeWeight(1);
+    line(680,60,x,y);
+    line(680,60,710,60);
+
+    textSize(30);
+    fill(c);
+    text('?',720,70);
   }
 }
 
@@ -146,25 +166,24 @@ function drawPastDot() {
     }
     
     drawO(x,y, c);
-    drawNum(i+1, x,y);
+    // drawNum(i+1, x,y);
   }
 }
 
 
-function drawO(x, y, c, size=15) {
-  overlay.stroke(color(255));
-  overlay.strokeWeight(2);  
-  overlay.fill(c);
-  overlay.ellipse(x,y, size);  
-  overlay.ellipse(x,y, size);
+function drawO(x, y, c, size=10) {
+  stroke(color(255));
+  strokeWeight(2);  
+  fill(c);
+  ellipse(x,y, size);    
 }
 
 function drawNum(n, x, y, size=10) {
-  overlay.stroke(color(255));
-  overlay.fill(color(255));
-  overlay.strokeWeight(1);  
-  overlay.textSize(size);
-  overlay.textAlign(CENTER,CENTER);
-  overlay.text(n, x, y);
+  stroke(color(255));
+  fill(color(255));
+  strokeWeight(1);  
+  textSize(size);
+  textAlign(CENTER,CENTER);
+  text(n, x, y);
 }
 

@@ -122,9 +122,9 @@ function setButtonEvent() {
           select('#cardSectionPrev').hide();
           select('#cardSectionEnd').hide();
 
-          drawCurrDot(qCurrAnswer);
-          writeStatus();
-          writeQuestion(qCurrAnswer);
+          // drawCurrDot(qCurrAnswer);
+          // writeStatus();
+          // writeQuestion(qCurrAnswer);
           qStep = gameStep.CHECK_ANSWER;    
         }
         // if

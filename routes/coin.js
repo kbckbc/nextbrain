@@ -9,13 +9,12 @@ router.use((req, res, next) => {
     next();
   }
   else {
-    console.log('/coin', 'Time: ', Date.now(),'/req.user', req.user);
+    // console.log('/coin', 'Time: ', Date.now(),'/req.user', req.user);
   
     if(!global.checkLogin(req)) {
       res.json({"result":0});
     }
     else {
-      console.log('/coin', 'login connected');
       next();
     }
   }
@@ -34,7 +33,6 @@ router.post('/inc', (req, res) => {
   async function run() {
     try {
       const coll = await tools.getDb("user");
-      console.log('coll',coll);
       // create a document to insert
       let dbresult;
       let result = {"result":false};
@@ -63,8 +61,8 @@ router.post('/inc', (req, res) => {
           result = {"result":true,"coin":req.user.coin};
         }          
       }
-      console.log('coin','inc','dbresult',dbresult);
-      console.log('coin','inc','result',result);
+      // console.log('coin','inc','dbresult',dbresult);
+      // console.log('coin','inc','result',result);
 
       res.send(result);
     } catch(err) {
