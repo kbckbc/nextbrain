@@ -1,6 +1,8 @@
 // express
 const express = require('express');
 app = express();
+var flash = require('connect-flash');
+
 
 // middleware
 app.use(express.static('public'));
@@ -8,6 +10,7 @@ app.use(express.json({limit:'1mb'}));
 const bodyParser=require('body-parser');
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+app.use(flash());
 
 // handlebars
 const hbs = require('express-handlebars');

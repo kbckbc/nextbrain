@@ -17,9 +17,13 @@
         <br>
         <button type="submit" class="btn btn-primary btn-lg">Log in</button>
     </form>
-
-
-
     </p>
+
+    {{#if errorMsg}}
+    <p class="text-danger">
+      {{errorMsg}}
+    </p>
+    {{/if}}
+
   </div>
 </div>

@@ -4,12 +4,14 @@ const tools = require('../lib/tools')
 
 module.exports = function (passport) {
   router.get('/login', function(req, res, next) {
-    res.render('login');
+    // console.log('req', req.flash());
+    res.render('login',{"errorMsg":req.flash().error});
   });
   
   router.post('/login', passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/auth/login'
+    failureRedirect: '/auth/login',
+    failureFlash:true
   }));
 
   router.get('/logout', function(req, res, next) {
