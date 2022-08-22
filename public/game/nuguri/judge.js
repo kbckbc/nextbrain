@@ -8,7 +8,8 @@ const JudgeState = {
   "ENEMY":6,
   "UNPAID":7,
   "NOTENOUGHCOIN":8,
-  "RANK":9
+  "RANK":9,
+  "ENDING":10
 }
 
 class Judge {
@@ -103,7 +104,13 @@ class Judge {
         else if(this.state == JudgeState.ENEMY) {
           msg = 'Be careful of enemies!';
         }
-        msg += '\nWanna save your score? Y or N?';
+        if(_score != 0) {
+          msg += '\nWanna save your score? Y or N?';
+        }
+        else {
+          msg += '\nYou should get score to write your ranking!';
+          msg += '\nPress any key to continue';
+        }
         text(msg, this.x, this.y);
         break;
    
@@ -112,6 +119,15 @@ class Judge {
         msg = 'Try more? Y or N?';
         text(msg, this.x, this.y);
         break;
+
+      case JudgeState.ENDING:
+        this.setFont(28, CENTER);
+        msg = `Wow, You beat the all stages!!`;
+        msg += `\nYou're a master of M!A!T!H!`;
+        msg += '\nPress any key';
+        msg += '\nTo save your score and quit the game!';
+        text(msg, this.x, this.y);
+      break;
       
     }
   }  
@@ -220,33 +236,64 @@ class Judge {
           this.caller.addScore();
           _stage++;
           if(_stage == _maxStage){
-            _stage = 0;
+            this.state = JudgeState.ENDING;
           }
-          initGameMode(_stage); 
-          
+          else {
+            initGameMode(_stage); 
+          }
         }        
         break;           
         
       case JudgeState.WRONG:
       case JudgeState.SPIKE:
       case JudgeState.ENEMY:
-        if(keyCode == 89 || keyCode == 121) { // y, Y
-          saveScore();
+        if( _score == 0) {
           this.state = JudgeState.RANK;
         }
-        else if(keyCode == 78 || keyCode == 110) { // n, N
-          this.state = JudgeState.RANK;
+        else {
+          if(keyCode == 89 || keyCode == 121) { // y, Y
+            saveScore()
+              .then(ret => {
+                if(ret.result) {
+                  this.state = JudgeState.RANK
+                  globalToast(ret.msg);
+                }
+              })
+              .catch(err => console.log(err));            
+          }
+          else if(keyCode == 78 || keyCode == 110) { // n, N
+            this.state = JudgeState.RANK;
+          }
         }
         break;
 
       case JudgeState.RANK:
         if(keyCode == 89 || keyCode == 121) { // y, Y
           initGameMode(_stage); 
-          updateCoinHeaderPage(data.coin);
+          // updateCoinHeaderPage(data.coin);
       }
       else if(keyCode == 78 || keyCode == 110) { // n, N
         resetGame();
       }            
+        break;
+
+      case JudgeState.ENDING:
+        // don's save if score is 0
+        if( _score == 0 ) {
+          globalToast("You should earn score to save your score!");
+          this.state = JudgeState.RANK;
+        }          
+        else {
+          saveScore()
+            .then(ret => {
+            if( ret.result) {
+              globalToast(ret.msg);
+              resetGame();
+            }
+            })
+            .catch(err => console.log(err));
+
+        }
         break;
     }// switch
     

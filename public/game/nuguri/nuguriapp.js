@@ -23,6 +23,7 @@ const _gameSetting = [
   [['+','-','*','/'],2,3,2,2]
 ];
 let _maxStage = _gameSetting.length;
+// _maxStage = 1;
 const _jarPos = [200, 300, 400, 500, 600];
 const _spikePos = [150, 250, 350, 450, 550];
 const _enemyPos = [300, 450, 600];
@@ -189,12 +190,13 @@ function saveScore() {
   
   // don's save if score is 0
   if( _score == 0 ) {
+    console.log('saveScore score 0 no save');
     return;
   }
 
   let data = {"score":_score, "time":_time, "stage":_stage};
 
-  fetch('/ranking/nuguri', {
+  return fetch('/ranking/nuguri', {
     method:'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -202,13 +204,7 @@ function saveScore() {
     body:JSON.stringify(data)
   })
   .then(res => res.json())
-  .then(res => {
-    globalToast('Your Score has been recorded!');
-  })
   .catch(err => console.log('saveScore', err));
-      
-      
-  console.log('saveScore complete');
 }
 
 
