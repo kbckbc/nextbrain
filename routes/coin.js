@@ -25,7 +25,6 @@ router.post('/inc', (req, res) => {
   // console.log('coin', 'inc', 'req.body', req.body);
   // console.log('coin', 'inc', 'req.user', req.user);
   if(global.debug) {
-    console.log('here');
     res.send({"result":true,"coin":999});
     return;
   }
