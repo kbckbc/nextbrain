@@ -36,6 +36,7 @@ app.use('/coin', require('./routes/coin'));
 
 
 
+global.MONGODB_URI_LOCAL = '';
 global.debug = false;
 global.port = 3000;
 global.checkLogin = (req) => {
