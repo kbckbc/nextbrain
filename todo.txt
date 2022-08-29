@@ -1,0 +1,473 @@
+<< mongodb >>
++ mongodb cluster 계정
+nextbrain
+NsGzoib2VlmnKbTe
+
+const uri = process.env.MONGODB_URI;
+
+mongodb+srv://nextbrain:NsGzoib2VlmnKbTe@cluster0.swhee.mongodb.net/
+
+
+<< TODO >>
++ 몽고db 수강
++ 게시판 추가
+
++ 웹팩 학습
++ nodejs 에서 https 만 허용하는 방법
++ 게임추가(플래피 버드, 틱택토)
++ 소스 정리
+
+- 핸들바 사용법 정리
+- Github 페이지 링크 생성
+- 너구리게임 엔딩
+- 너구리 게임 랭킹 스테이지도 등록
+- 너구리 소스 정리
+- 로그인 실패시 메시지 보여주기
+- 로그인 없이 둘러볼수 있도록 조치
+- about 페이지 만들기
+- 중복 가입 제한
+- 스테이트 챌린지도 코인 사용
+- 코인사용시 toast 띄우기
+- 모달 및 토스트 함수 생성
+- 첫페이지 만들어야 함
+- 코인을 획득하도록 수정 유저 정보에 기록되어야함
+- 너구리는 코인을 차감하면서 게임 하도록 수정
+- 유저정보 확인 페이지 생성
+- 게임 도중 세션이 끊겼다면 랭킹 등록 안되어야 하고 클라에서 노티가 있어야 함
+- 너구리 랭킹 만들기
+- 스테이트 문제 라디오 바꾸기
+- fetch, asyn await 정리한번 하기
+- 회원가입
+- 회원탈퇴
+- 몽고디비에서 회원 정보 가지고 오는걸로 바꾸는중, 그와중에 async 에서 걸려서 허우적...
+
+
+<< HEROKU >>
++ CLI 에서 로그인 부터 해야함
+- heroku login
+- git push heroku
+
+
+<< JAVASCRIPT >>
++ 시간 관련
+let timestamp = Date.now()
+let date = new Date(timestamp).toUTCString(); 
+
++ button
+- p5js: select('#btnTryAgain').mousePressed(() => {})
+- native: document.getElementById("demo").onclick = () => {};
+
++ how to send data
+- FORM 이용
+<form action="/auth/signup" method="post">
+  ...
+  <button type="submit" class="btn btn-primary">Sign up</button>
+</form>
+
+- FETCH 호출 시, body 에 넣어서 호출
+  return fetch('/coin/inc', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "type":"inc",
+      "coin":coin
+    })
+  })
+  .then(res => res.json())
+  .catch(err => console.log('/util','addCoin', err));
+
+
+
+
+<< Cookie 쿠키 >>
+HTTP 헤더에는 request, response 헤더가 있다.
+유저 -> 서버 : request 헤더
+유저 <- 서버 : response 헤더
+
+1. 서버에서 먼저 쿠키를 생성한 다음, 유저 <- 서버로 쿠키 전송(response 에 실어보냄)
+2. 유저 -> 서버로 request 요청 할때마다 request 에 쿠키 실어서 보냄
+3. 서버는 쿠키 값을 수신하여 분기처리한다.
+
+
+
+<< NODEJS 자료 방향 정리 >>
+
+- 서버 -> 클라 값 : render 할때 input 파람 넘긴걸 쓰면 됨
+  router.get('/login', function(req, res, next) {
+    // console.log('req', req.flash());
+    res.render('login',{"errorMsg":req.flash().error});
+  });
+
+- 클라 -> 서버 값 : form 으로 post 를 하던지 fetch() 호출시 Json 형태로 넘기면 됨
+  router.post('/signup', function(req, res, next) {
+    let data = req.body;
+    data.joindate = Date.now();
+    data.coin = 10;
+
+    var bcrypt = require('bcryptjs');
+    bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(data.password, salt, function(err, hash) {
+            data.password = hash;
+            delete data.password2;
+        });
+    });
+  });
+
+
+
+
+<< FETCH 정리 >>
+- 호출부
+function addCoin(coin) {
+  return fetch('/coin/inc', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "type":"inc",
+      "coin":coin
+    })
+  })
+  .then(res => res.json())
+  .catch(err => console.log('/util','addCoin', err));
+}
+
+addCoin(coin)
+.then((data) => {
+  if(data.result == true) {
+    msg = `You've got all correct answers!`;
+    msg += ` You've earn ${coin} coin(s)`;
+    updateCoinHeaderPage(data.coin);
+  }
+  else {
+    msg = data.msg;
+  }
+
+  globalToast(msg);
+})
+.catch( err => console.Console(err));
+
+- 구현부
+- POST 넘어온 데이터가 req.body 로 접근 됨
+router.post('/inc', (req, res) => {
+  async function run() {
+    try {
+      const coll = await tools.getDb("user");
+      let dbresult;
+      let result = {"result":false,"coin":0, "msg":"Oh, there's some problem. Coin hasn't updated."};
+      
+      // increase coin
+      if( req.body.type == 'inc') {
+        dbresult = await coll.updateOne(
+          {"username":req.user.username},
+          { $inc: { coin: req.body.coin}} 
+        );
+
+        if(dbresult.modifiedCount == 1) {
+          // update session coin info
+          req.user.coin += req.body.coin;  
+          result = {"result":true,"coin":req.user.coin,"msg":"success"};
+        }
+      }
+
+      res.send(result);
+    } catch(err) {
+      console.log('coin.js','post',err);
+    }
+  }
+  run().catch(console.dir); 
+});
+
+
+
+
+<< HOW TO START NODEJS >>
+
++ npm init
+
++ npm install express
+
++ start app
+const express = require('express');
+app = express();
+
+const port = process.env.PORT || global.port;
+app.listen(port, () => {
+    console.log(`listening at ${port}`);
+});
+
++ npm start 명령으로 package.json 다음과 같이 추가해야 함
+  "scripts": {
+    "start": "node app.js"
+  },
+
+
+<< NODEJS PACKAGE >>
+
++ npm uninstall -g '패키지명'
+
++ 소스 수정할때 마다 재시작
+npm install -g nodemon
+nodemon <실행js 파일>
+
+- 만약 안되면 Get-ExecutionPolicy 실행. Restricted 라고 뜰텐데 이걸 풀어줘야 함
+- 이 명령 실행 후 nodemon 다시 하면 됨: Set-ExecutionPolicy -Scope CurrentUser Unrestrict
+
++ 서버에서 정적 페이지 폴더 할당하기(index.html 띄우는것 처럼..)
+app.use(express.static('public'));
+
++ 클라 <-> 서버 주고 받을때 req.body 에다가 값을 주고 받을려면 아래와 같이 사용
+- body-parser 는 express 4.x 버전부터 포함되어 있어서 아래와 같이만 하면 됨
+app.use(express.json({limit:'1mb'}));
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+
++ example
+// middleware
+app.use(express.static('public'));
+app.use(express.json({limit:'1mb'}));
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(flash());
+
+
+
+<< GET, POST >> 
+
++ GET 방식
+- query string : /topic?id=1
+app.get('/topic', (req, res) => {
+  res.send(req.query.id);
+});
+
+html 의 form 은 URL 을 생성해주는 용도라고 생각하자.
+form tag 의 기본값은 'GET' 방식
+
+- semantic url : /topic/2
+app.get('/topic/:id', (req, res) => {
+  res.send(req.params.id);
+});
+
+app.get('/topic/:id/:mode', (req, res) => {
+  res.send(req.params.id + ',' + req.params.mode);
+});
+
++ POST 방식
+- body-parser: POST 로 보낸 값을 req.body 으로 접근할수 있게 해준다.
+- express 4.x 버전부터는 body-parser 가 포함됨
+app.use(express.json({limit:'1mb'}));
+app.use(express.urlencoded({ extended: false })) // for parsing application/x-www-form-urlencoded
+- 위와 같이 미들웨어 등록하면 node js 서버에서 req.body 로 접근이 가능함. res.json(data); 로 리턴도 가능함.
+- 클라이언트
+  fetch('/d', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "id":input
+    })
+  })
+  .then(res => {
+    console.log('test.js', 'res', res);
+    return res.json();
+  })
+  .then(json => {
+    console.log('test.js','json', json);
+    document.getElementById('fetch_result').value = json.str;
+  })
+  .catch(err => console.log( err));
+
+- 서버
+app.post('/d', (req,res) => {
+  console.log('req.body.id', req.body.id);
+
+  let str = `You sent ${req.body.id}`;
+
+  res.send({str});
+});
+
+
+<< HOW TO ROUTE >>
+
++ 간단한 방법
+// home rendering 
+app.get('/', (req, res) => {
+  res.render('home', {user: req.user});
+});
+
+app.get('/about', (req, res) => {
+  res.render('about');
+});
+
++ route 파일을 따로 분리
+- 기본사용법: app.use('경로', Router 객체)
+
+- ./routes/game.js
+const express = require('express');
+const router = express.Router();
+
+router.get('/state', (req, res) => {
+  res.render('state', {user:req.user});
+});
+
+router.get('/nuguri', (req, res) => {
+  res.render('nuguri', {user:req.user});
+});
+
+module.exports = router;
+
+- app.js
+app.use('/game', require('./routes/game'));
+
+
++ route 파일을 따로 분리 + 인자 넘기기
+
+- ./routes/auth.js
+const express = require('express');
+const router = express.Router();
+
+module.exports = function (passport) {
+  router.get('/login', function(req, res, next) {
+    res.render('login',{"errorMsg":req.flash().error});
+  });
+  
+  router.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/auth/login',
+    failureFlash:true
+  }));
+
+  return router;
+};
+
+- app.js
+app.use('/auth', require('./routes/auth')(passport));
+
+
+
+<< NODEJS 파일분리 >>
+
+- 전역변수 
+global: global.test = 1 이런식으로 할당하고 사용은 global.test 로 바로 접근 가능
+
+- 신규파일: module.exports = 빼고 싶은 애(object든 함수든) 할당
+- 사용할곳: let xxx = require('신규파일') 이렇게 참조하면 됨
+- example
+- tools.js
+module.exports = {
+  prettyData: (data) => {},
+  getDb: () => {}
+}
+- auth.js
+const tools = require('./tools');
+tools.getDb("user");
+
+
+
+
+
+
+
+
+<< PASSPORT 사용법 >> 
+
++ 주의! passport 를 사용할때 body-parser 를 같이 써야함. passport 가 그걸쓰나봄.
++ 주의! passport 에서 인증 성공하면 req.user 객체가 할당되는데 어떤 라우터에 함수에서든 접근가능
+  - 만약 이게 안된다면 app 실행 순서를 passport 가 가장 먼저 오게 해야 함.
+
++ 주의! passport 에서 id,passwd 를 사용하려면 아래와 같이 2개를 설치해야 함
+npm install passport 
+npm install pasport-local
+
++ express-session 
+  - 해당 미들웨어 사용하면 request 에 항상 session obejct 가 생겨서 사용할수 있음
++ 세션 세팅
+  - express-session 을 사용하고 그것의 저장소로 sqlite3 을 사용함
+저장소는 다른걸 써도 되지만 그중에서 그냥 검색 걸린걸로 사용한 거임
+$ npm install express-session
+$ npm install connect-sqlite3
+
+/app.js
+var passport = require('passport');
+var session = require('express-session');
+var SQLiteStore = require('connect-sqlite3')(session);
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  store: new SQLiteStore({ db: 'sessions.db', dir: './var/db' })
+}));
+app.use(passport.authenticate('session'));
+
+/routers/auth.js
+passport.serializeUser(function(user, cb) {
+  process.nextTick(function() {
+    cb(null, { id: user.id, username: user.username });
+  });
+});
+
+passport.deserializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, user);
+  });
+});
+
+
+
+<< HANDLEBARS - nodejs 템플릿 엔진 >>
+
++ 템플릿 엔진 Jade 
+- 템플릿이 있는 디렉토리 설정 : app.set('views', './views')
+- 사용할 엔진 지정: app.set('view engine', 'jade')
+- res.render('파일명') 으로 렌더링
+
+
++ 템플릿 엔진 Handelbars
+$ npm install --express-handlebars
+
+const exphbs = require('express-handlebars');
+app.engine('hbs', exphbs({
+    defaultLayout: 'main',
+    extname: '.hbs'
+}));
+app.set('view engine', 'hbs');
+
+기본 레이아웃을 views/layouts/main.hbs 를 만들어주고
+그 안에 {{{body}}} 이렇게 다른 템플릿을 추가로 넣는 방식으로 진행된다.
+{{{body}}} 에 들어가는 파일은 views/ 밑의 hbs 로 추가된다.
+    ├─.
+    ├── server.js
+    └── views
+        ├── home.handlebars
+        └── layouts
+            └── main.handlebars
+
+- main.hbs
+    {{>header}}
+	  {{{body}}}
+    {{>footer}}
+
+
+
+
+<< ETC >>
+
++ etc
+- 무료 이미지 사이트 unsplash
+
+
++ NEDB
+- 로컬에 파일을 만들어서 object 를 저장할 수 있음
+- 그런데 많은 호스팅 제공 업체들이 local 를 배포할때 혹은 daily base로 reset 해버려서 파일이 유지가 안됨
+// nedb
+const nedb = require('nedb');
+const nedbDB = new nedb('database.db');
+nedbDB.loadDatabase();
+// nedbDB.insert(data);
+// nedbDB.find({}, (err, data) => {
+//     res.json(data);
+// });

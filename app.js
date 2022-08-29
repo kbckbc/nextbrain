@@ -7,9 +7,7 @@ var flash = require('connect-flash');
 // middleware
 app.use(express.static('public'));
 app.use(express.json({limit:'1mb'}));
-const bodyParser=require('body-parser');
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(flash());
 
 // handlebars
@@ -36,7 +34,8 @@ app.use('/coin', require('./routes/coin'));
 
 
 
-global.MONGODB_URI_LOCAL = '';
+// set null to MONGODB_URI_LOCAL when deploy.
+global.MONGODB_URI_LOCAL = 'mongodb+srv://nextbrain:NsGzoib2VlmnKbTe@cluster0.swhee.mongodb.net/?retryWrites=true&w=majority';
 global.debug = false;
 global.port = 3000;
 global.checkLogin = (req) => {
